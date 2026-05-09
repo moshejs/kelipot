@@ -29,59 +29,93 @@ export default function Home() {
             <div className="element-art-wrap reveal">
               <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
-                  <radialGradient id="fire-pure-grad" cx="50%" cy="78%" r="58%">
-                    <stop offset="0%" stopColor="#f4c98a" stopOpacity="0.95" />
-                    <stop offset="45%" stopColor="#d68a55" stopOpacity="0.7" />
+                  <radialGradient id="fire-pure-glow" cx="50%" cy="55%" r="55%">
+                    <stop offset="0%" stopColor="#d68a55" stopOpacity="0.42" />
+                    <stop offset="60%" stopColor="#7a3a1c" stopOpacity="0.18" />
                     <stop offset="100%" stopColor="#7a3a1c" stopOpacity="0" />
                   </radialGradient>
-                  <radialGradient id="fire-corrupt-grad" cx="50%" cy="80%" r="58%">
-                    <stop offset="0%" stopColor="#ffb87a" stopOpacity="1" />
-                    <stop offset="35%" stopColor="#c43a22" stopOpacity="0.85" />
+                  <radialGradient id="fire-pure-grad" cx="50%" cy="80%" r="58%">
+                    <stop offset="0%" stopColor="#fbe5b8" stopOpacity="0.95" />
+                    <stop offset="35%" stopColor="#f4c98a" stopOpacity="0.85" />
+                    <stop offset="72%" stopColor="#d68a55" stopOpacity="0.55" />
+                    <stop offset="100%" stopColor="#7a3a1c" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="fire-pure-core" cx="50%" cy="78%" r="40%">
+                    <stop offset="0%" stopColor="#fff4d8" stopOpacity="0.95" />
+                    <stop offset="55%" stopColor="#fbe5b8" stopOpacity="0.55" />
+                    <stop offset="100%" stopColor="#f4c98a" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="fire-corrupt-glow" cx="50%" cy="55%" r="62%">
+                    <stop offset="0%" stopColor="#c43a22" stopOpacity="0.5" />
+                    <stop offset="55%" stopColor="#3a0a04" stopOpacity="0.22" />
                     <stop offset="100%" stopColor="#3a0a04" stopOpacity="0" />
                   </radialGradient>
-                  <filter id="fire-blur-pure" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2" />
+                  <radialGradient id="fire-corrupt-grad" cx="50%" cy="82%" r="58%">
+                    <stop offset="0%" stopColor="#ffd09a" stopOpacity="1" />
+                    <stop offset="32%" stopColor="#ffb87a" stopOpacity="0.92" />
+                    <stop offset="68%" stopColor="#c43a22" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#3a0a04" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="fire-corrupt-core" cx="50%" cy="80%" r="36%">
+                    <stop offset="0%" stopColor="#fff0d0" stopOpacity="0.95" />
+                    <stop offset="60%" stopColor="#ffd09a" stopOpacity="0.55" />
+                    <stop offset="100%" stopColor="#ffb87a" stopOpacity="0" />
+                  </radialGradient>
+                  <filter id="fire-blur-pure" x="-25%" y="-25%" width="150%" height="150%">
+                    <feGaussianBlur stdDeviation="2.4" />
                   </filter>
-                  <filter id="fire-blur-corrupt" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="1.2" />
+                  <filter id="fire-blur-corrupt" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="1.8" />
                   </filter>
                 </defs>
 
-                {/* pure flame: graceful, dancing */}
+                {/* pure: a single calm flame */}
                 <g className="pure-layer">
+                  <ellipse cx="100" cy="178" rx="62" ry="64" fill="url(#fire-pure-glow)" filter="url(#fire-blur-pure)" />
                   <g className="fire-pure-flame">
                     <path
-                      d="M100 222 C70 192 76 158 92 132 C98 116 96 96 100 64 C104 96 102 116 108 132 C124 158 130 192 100 222 Z"
+                      d="M 80 222 C 60 220 44 192 56 156 C 66 130 84 122 86 96 C 86 76 94 58 100 38 C 106 58 114 76 114 96 C 116 122 134 130 144 156 C 156 192 140 220 120 222 L 80 222 Z"
                       fill="url(#fire-pure-grad)"
-                      filter="url(#fire-blur-pure)"
                     />
                     <path
-                      d="M100 220 C82 198 88 174 96 152 C100 138 98 122 100 96 C102 122 100 138 104 152 C112 174 118 198 100 220 Z"
-                      fill="#f4c98a"
-                      fillOpacity="0.6"
+                      d="M 88 218 C 74 215 62 188 72 158 C 80 134 90 130 90 108 C 90 90 96 76 100 62 C 104 76 110 90 110 108 C 110 130 120 134 128 158 C 138 188 126 215 112 218 L 88 218 Z"
+                      fill="url(#fire-pure-core)"
+                    />
+                    <path
+                      d="M 100 78 C 96 96 96 130 100 150 C 104 130 104 96 100 78 Z"
+                      fill="#fff4d8"
+                      fillOpacity="0.7"
                     />
                   </g>
-                  {/* gentle base glow */}
-                  <ellipse cx="100" cy="222" rx="44" ry="6" fill="#d68a55" fillOpacity="0.25" />
+                  <ellipse cx="100" cy="222" rx="42" ry="3" fill="#f4c98a" fillOpacity="0.5" />
+                  <circle cx="101" cy="22" r="1.2" fill="#fbe5b8" fillOpacity="0.65" />
                 </g>
 
-                {/* corrupt flame: jagged, devouring */}
+                {/* corrupt: aggressive, taller flame with embers */}
                 <g className="corrupt-layer">
+                  <ellipse cx="100" cy="166" rx="76" ry="82" fill="url(#fire-corrupt-glow)" filter="url(#fire-blur-corrupt)" />
                   <g className="fire-corrupt-flame">
                     <path
-                      d="M100 224 C58 188 70 144 88 116 C94 96 88 72 100 36 C112 72 106 96 112 116 C130 144 142 188 100 224 Z"
+                      d="M 76 226 C 48 224 22 192 38 152 C 52 120 78 114 70 86 C 62 56 86 36 94 16 Q 100 6 106 16 C 114 36 138 56 130 86 C 122 114 148 120 162 152 C 178 192 152 224 124 226 L 76 226 Z"
                       fill="url(#fire-corrupt-grad)"
-                      filter="url(#fire-blur-corrupt)"
                     />
                     <path
-                      d="M100 222 C76 200 82 168 92 142 C96 124 92 102 100 76 C108 102 104 124 108 142 C118 168 124 200 100 222 Z"
-                      fill="#ffb87a"
-                      fillOpacity="0.55"
+                      d="M 86 220 C 64 218 46 192 60 156 C 70 130 86 124 82 100 C 78 78 90 60 96 40 Q 100 30 104 40 C 110 60 122 78 118 100 C 114 124 130 130 140 156 C 154 192 136 218 114 220 L 86 220 Z"
+                      fill="url(#fire-corrupt-core)"
                     />
-                    {/* dagger tongues */}
-                    <path d="M100 36 L96 60 L100 50 L104 60 Z" fill="#ffb87a" fillOpacity="0.9" />
+                    <path
+                      d="M 100 50 C 96 90 96 140 100 168 C 104 140 104 90 100 50 Z"
+                      fill="#fff0d0"
+                      fillOpacity="0.7"
+                    />
                   </g>
-                  <ellipse cx="100" cy="224" rx="60" ry="8" fill="#c43a22" fillOpacity="0.45" />
+                  <ellipse cx="100" cy="226" rx="56" ry="4" fill="#c43a22" fillOpacity="0.6" />
+                  {/* embers */}
+                  <circle cx="58" cy="48" r="1.3" fill="#ffb87a" fillOpacity="0.8" />
+                  <circle cx="148" cy="58" r="1.6" fill="#ffd09a" fillOpacity="0.85" />
+                  <circle cx="74" cy="20" r="0.9" fill="#ffb87a" fillOpacity="0.7" />
+                  <circle cx="124" cy="32" r="1.1" fill="#ffd09a" fillOpacity="0.75" />
+                  <circle cx="100" cy="2" r="1.2" fill="#fff0d0" fillOpacity="0.6" />
                 </g>
               </svg>
             </div>
@@ -115,31 +149,58 @@ export default function Home() {
             <div className="element-art-wrap reveal">
               <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
-                  <radialGradient id="water-bg" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#6b7ba8" stopOpacity="0.18" />
+                  <radialGradient id="water-bg" cx="50%" cy="42%" r="55%">
+                    <stop offset="0%" stopColor="#6b7ba8" stopOpacity="0.24" />
+                    <stop offset="65%" stopColor="#3a466b" stopOpacity="0.12" />
+                    <stop offset="100%" stopColor="#1f2a4a" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="water-void" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#000" stopOpacity="0.92" />
+                    <stop offset="55%" stopColor="#0a0d18" stopOpacity="0.5" />
                     <stop offset="100%" stopColor="#1f2a4a" stopOpacity="0" />
                   </radialGradient>
                 </defs>
 
-                <circle cx="100" cy="100" r="90" fill="url(#water-bg)" />
+                {/* basin */}
+                <circle cx="100" cy="100" r="92" fill="url(#water-bg)" />
+                <circle cx="100" cy="100" r="92" fill="none" stroke="#6b7ba8" strokeWidth="0.4" strokeOpacity="0.22" />
 
                 {/* pure: ripples expanding outward */}
                 <g className="pure-layer">
-                  <circle className="ripple-1" cx="100" cy="100" r="8" fill="none" stroke="#6b7ba8" strokeWidth="0.8" />
-                  <circle className="ripple-2" cx="100" cy="100" r="8" fill="none" stroke="#6b7ba8" strokeWidth="0.8" />
-                  <circle className="ripple-3" cx="100" cy="100" r="8" fill="none" stroke="#6b7ba8" strokeWidth="0.8" />
-                  {/* still center */}
-                  <circle cx="100" cy="100" r="3" fill="#6b7ba8" fillOpacity="0.6" />
+                  <circle cx="100" cy="100" r="62" fill="none" stroke="#6b7ba8" strokeWidth="0.3" strokeOpacity="0.14" />
+                  <circle cx="100" cy="100" r="40" fill="none" stroke="#6b7ba8" strokeWidth="0.3" strokeOpacity="0.16" />
+                  <circle className="ripple-1" cx="100" cy="100" r="8" fill="none" stroke="#9aacd4" strokeWidth="0.9" />
+                  <circle className="ripple-2" cx="100" cy="100" r="8" fill="none" stroke="#9aacd4" strokeWidth="0.9" />
+                  <circle className="ripple-3" cx="100" cy="100" r="8" fill="none" stroke="#9aacd4" strokeWidth="0.9" />
+                  {/* center droplet */}
+                  <circle cx="100" cy="100" r="3.4" fill="#9aacd4" fillOpacity="0.85" />
+                  <circle cx="100" cy="99" r="1.2" fill="#fff" fillOpacity="0.5" />
                 </g>
 
-                {/* corrupt: rings collapsing inward */}
+                {/* corrupt: rings collapsing inward over a vortex */}
                 <g className="corrupt-layer">
-                  <circle className="pull-1" cx="100" cy="100" r="92" fill="none" stroke="#1f2a4a" strokeWidth="1" />
-                  <circle className="pull-2" cx="100" cy="100" r="92" fill="none" stroke="#1f2a4a" strokeWidth="1" />
-                  <circle className="pull-3" cx="100" cy="100" r="92" fill="none" stroke="#1f2a4a" strokeWidth="1" />
-                  {/* dark vortex eye */}
-                  <circle cx="100" cy="100" r="5" fill="#0a0908" />
-                  <circle cx="100" cy="100" r="14" fill="none" stroke="#1f2a4a" strokeWidth="0.6" strokeOpacity="0.6" />
+                  {/* spiral arms — static, suggest swirl */}
+                  <path
+                    d="M 178 100 C 178 60 140 38 100 58 C 70 73 78 102 100 96"
+                    fill="none"
+                    stroke="#1f2a4a"
+                    strokeWidth="0.8"
+                    strokeOpacity="0.55"
+                  />
+                  <path
+                    d="M 22 100 C 22 140 60 162 100 142 C 130 127 122 98 100 104"
+                    fill="none"
+                    stroke="#1f2a4a"
+                    strokeWidth="0.8"
+                    strokeOpacity="0.55"
+                  />
+                  <circle className="pull-1" cx="100" cy="100" r="92" fill="none" stroke="#3a466b" strokeWidth="1" />
+                  <circle className="pull-2" cx="100" cy="100" r="92" fill="none" stroke="#3a466b" strokeWidth="1" />
+                  <circle className="pull-3" cx="100" cy="100" r="92" fill="none" stroke="#3a466b" strokeWidth="1" />
+                  {/* void core */}
+                  <circle cx="100" cy="100" r="22" fill="url(#water-void)" />
+                  <circle cx="100" cy="100" r="22" fill="none" stroke="#1f2a4a" strokeWidth="0.5" strokeOpacity="0.7" />
+                  <circle cx="100" cy="100" r="6" fill="#000" />
                 </g>
               </svg>
             </div>
@@ -183,61 +244,77 @@ export default function Home() {
                   </linearGradient>
                 </defs>
 
-                {/* pure: monolith, still and dignified */}
+                {/* pure: chiseled monolith with beveled top and lit/shadowed facets */}
                 <g className="pure-layer">
-                  <rect x="62" y="40" width="76" height="184" fill="url(#earth-stone)" rx="1" />
-                  {/* subtle texture striations */}
-                  <line x1="62" y1="80" x2="138" y2="78" stroke="#b08a5a" strokeWidth="0.3" strokeOpacity="0.18" />
-                  <line x1="62" y1="124" x2="138" y2="126" stroke="#b08a5a" strokeWidth="0.3" strokeOpacity="0.18" />
-                  <line x1="62" y1="170" x2="138" y2="168" stroke="#b08a5a" strokeWidth="0.3" strokeOpacity="0.18" />
-                  {/* crown light */}
-                  <line x1="62" y1="40" x2="138" y2="40" stroke="#b08a5a" strokeWidth="0.5" strokeOpacity="0.5" />
-                  {/* ground shadow */}
-                  <ellipse cx="100" cy="226" rx="54" ry="3" fill="#000" fillOpacity="0.6" />
+                  <path
+                    d="M 76 38 L 124 38 L 132 54 L 138 224 L 62 224 L 68 54 Z"
+                    fill="url(#earth-stone)"
+                  />
+                  {/* beveled top face */}
+                  <path d="M 76 38 L 124 38 L 132 54 L 68 54 Z" fill="#5a4830" fillOpacity="0.55" />
+                  {/* right facet shadow */}
+                  <path d="M 100 54 L 132 54 L 138 224 L 100 224 Z" fill="#000" fillOpacity="0.18" />
+                  {/* striations */}
+                  <path d="M 67 96 L 132 95" stroke="#b08a5a" strokeWidth="0.3" strokeOpacity="0.18" fill="none" />
+                  <path d="M 67 132 L 133 134" stroke="#b08a5a" strokeWidth="0.3" strokeOpacity="0.18" fill="none" />
+                  <path d="M 66 174 L 134 172" stroke="#b08a5a" strokeWidth="0.3" strokeOpacity="0.18" fill="none" />
+                  {/* crown highlight */}
+                  <line x1="76" y1="38" x2="124" y2="38" stroke="#d4a86a" strokeWidth="0.6" strokeOpacity="0.6" />
+                  <ellipse cx="100" cy="226" rx="58" ry="3" fill="#000" fillOpacity="0.7" />
                 </g>
 
-                {/* corrupt: same monolith, fractured. cracks reveal as user hovers */}
+                {/* corrupt: same shape, fractured */}
                 <g className="corrupt-layer">
-                  <rect x="62" y="40" width="76" height="184" fill="url(#earth-stone-corrupt)" rx="1" />
-                  <line x1="62" y1="40" x2="138" y2="40" stroke="#4a3520" strokeWidth="0.5" strokeOpacity="0.5" />
-                  <ellipse cx="100" cy="226" rx="54" ry="3" fill="#000" fillOpacity="0.7" />
-                  {/* cracks: dashed strokes that draw in */}
+                  <path
+                    d="M 76 38 L 124 38 L 132 54 L 138 224 L 62 224 L 68 54 Z"
+                    fill="url(#earth-stone-corrupt)"
+                  />
+                  <path d="M 76 38 L 124 38 L 132 54 L 68 54 Z" fill="#1a1208" fillOpacity="0.85" />
+                  <path d="M 100 54 L 132 54 L 138 224 L 100 224 Z" fill="#000" fillOpacity="0.32" />
+                  <line x1="76" y1="38" x2="124" y2="38" stroke="#4a3520" strokeWidth="0.5" strokeOpacity="0.4" />
+                  <ellipse cx="100" cy="226" rx="58" ry="3" fill="#000" fillOpacity="0.85" />
+
+                  {/* main fissure */}
                   <path
                     className="earth-crack earth-crack-1"
-                    d="M100 40 L96 78 L102 116 L98 154 L100 192 L99 224"
+                    d="M 100 38 L 96 78 L 104 116 L 96 152 L 102 192 L 99 224"
                     fill="none"
-                    stroke="#0a0604"
-                    strokeWidth="1.2"
+                    stroke="#000"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
                   />
                   <path
                     className="earth-crack earth-crack-2"
-                    d="M96 78 L78 92 L72 118 L62 132"
+                    d="M 96 78 L 80 92 L 72 116 L 64 130"
                     fill="none"
-                    stroke="#0a0604"
-                    strokeWidth="0.8"
+                    stroke="#000"
+                    strokeWidth="0.9"
+                    strokeLinecap="round"
                   />
                   <path
                     className="earth-crack earth-crack-3"
-                    d="M102 116 L122 128 L128 152 L138 162"
+                    d="M 104 116 L 122 128 L 130 152 L 136 170"
                     fill="none"
-                    stroke="#0a0604"
-                    strokeWidth="0.8"
+                    stroke="#000"
+                    strokeWidth="0.9"
+                    strokeLinecap="round"
                   />
                   <path
                     className="earth-crack earth-crack-4"
-                    d="M98 154 L86 178 L82 204"
+                    d="M 96 152 L 86 174 L 80 200"
                     fill="none"
-                    stroke="#0a0604"
-                    strokeWidth="0.6"
+                    stroke="#000"
+                    strokeWidth="0.7"
+                    strokeLinecap="round"
                   />
                   {/* crack inner glow */}
                   <path
                     className="earth-crack earth-crack-1"
-                    d="M100 40 L96 78 L102 116 L98 154 L100 192 L99 224"
+                    d="M 100 38 L 96 78 L 104 116 L 96 152 L 102 192 L 99 224"
                     fill="none"
-                    stroke="#b08a5a"
-                    strokeWidth="0.3"
-                    strokeOpacity="0.4"
+                    stroke="#7a3a1c"
+                    strokeWidth="0.4"
+                    strokeOpacity="0.55"
                   />
                 </g>
               </svg>
@@ -281,34 +358,32 @@ export default function Home() {
 
                 <rect x="0" y="0" width="200" height="240" fill="url(#air-bg)" />
 
-                {/* pure: breath rising, particles drifting up */}
+                {/* pure: short curved wisps rising */}
                 <g className="pure-layer">
-                  <circle className="breath breath-1" cx="50" cy="220" r="1.6" fill="#c4cdd0" />
-                  <circle className="breath breath-2" cx="78" cy="220" r="1.2" fill="#c4cdd0" />
-                  <circle className="breath breath-3" cx="100" cy="220" r="2" fill="#c4cdd0" />
-                  <circle className="breath breath-4" cx="124" cy="220" r="1.4" fill="#c4cdd0" />
-                  <circle className="breath breath-5" cx="150" cy="220" r="1.2" fill="#c4cdd0" />
-                  <circle className="breath breath-6" cx="64" cy="220" r="1" fill="#c4cdd0" />
-                  <circle className="breath breath-7" cx="136" cy="220" r="1.6" fill="#c4cdd0" />
-                  {/* source line */}
-                  <line x1="38" y1="222" x2="162" y2="222" stroke="#c4cdd0" strokeWidth="0.4" strokeOpacity="0.3" />
+                  <path className="breath breath-1" d="M 50 222 Q 47 214 51 206" fill="none" stroke="#c4cdd0" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.7" />
+                  <path className="breath breath-2" d="M 78 222 Q 76 215 80 208" fill="none" stroke="#c4cdd0" strokeWidth="1.1" strokeLinecap="round" strokeOpacity="0.6" />
+                  <path className="breath breath-3" d="M 100 222 Q 97 210 101 198" fill="none" stroke="#c4cdd0" strokeWidth="1.6" strokeLinecap="round" strokeOpacity="0.85" />
+                  <path className="breath breath-4" d="M 124 222 Q 122 213 126 204" fill="none" stroke="#c4cdd0" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.7" />
+                  <path className="breath breath-5" d="M 150 222 Q 148 215 152 208" fill="none" stroke="#c4cdd0" strokeWidth="1.1" strokeLinecap="round" strokeOpacity="0.6" />
+                  <path className="breath breath-6" d="M 64 222 Q 63 217 65 213" fill="none" stroke="#c4cdd0" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.55" />
+                  <path className="breath breath-7" d="M 136 222 Q 134 213 138 204" fill="none" stroke="#c4cdd0" strokeWidth="1.4" strokeLinecap="round" strokeOpacity="0.75" />
+                  <line x1="38" y1="223" x2="162" y2="223" stroke="#c4cdd0" strokeWidth="0.4" strokeOpacity="0.3" />
                 </g>
 
-                {/* corrupt: frozen mid-rise, severed by horizontal cut */}
+                {/* corrupt: wisps frozen mid-rise, severed by horizontal cut */}
                 <g className="corrupt-layer">
-                  <circle cx="50" cy="172" r="1.4" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="78" cy="148" r="1" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="100" cy="156" r="1.8" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="124" cy="142" r="1.2" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="150" cy="168" r="1" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="64" cy="190" r="0.8" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="136" cy="180" r="1.4" fill="#c4cdd0" fillOpacity="0.45" />
-                  <circle cx="44" cy="208" r="1" fill="#c4cdd0" fillOpacity="0.4" />
-                  <circle cx="158" cy="210" r="1.2" fill="#c4cdd0" fillOpacity="0.4" />
-                  <line x1="38" y1="222" x2="162" y2="222" stroke="#c4cdd0" strokeWidth="0.4" strokeOpacity="0.25" />
-                  {/* the cut: a dagger of negative space */}
+                  <path d="M 50 172 Q 47 164 51 156" fill="none" stroke="#c4cdd0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.45" />
+                  <path d="M 78 148 Q 76 141 80 134" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.45" />
+                  <path d="M 100 156 Q 97 144 101 132" fill="none" stroke="#c4cdd0" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.45" />
+                  <path d="M 124 142 Q 122 133 126 124" fill="none" stroke="#c4cdd0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.45" />
+                  <path d="M 150 168 Q 148 161 152 154" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.45" />
+                  <path d="M 64 190 Q 63 185 65 181" fill="none" stroke="#c4cdd0" strokeWidth="0.8" strokeLinecap="round" strokeOpacity="0.4" />
+                  <path d="M 136 180 Q 134 171 138 162" fill="none" stroke="#c4cdd0" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.45" />
+                  <path d="M 44 208 Q 42 203 46 198" fill="none" stroke="#c4cdd0" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.4" />
+                  <path d="M 158 210 Q 156 205 160 200" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.4" />
+                  <line x1="38" y1="223" x2="162" y2="223" stroke="#c4cdd0" strokeWidth="0.4" strokeOpacity="0.25" />
+                  {/* the cut */}
                   <line className="air-cut" x1="20" y1="120" x2="180" y2="120" stroke="#c4cdd0" strokeWidth="1" strokeOpacity="0.85" />
-                  {/* emphasis ticks at the cut endpoints */}
                   <line className="air-cut" x1="20" y1="115" x2="20" y2="125" stroke="#c4cdd0" strokeWidth="1" strokeOpacity="0.85" />
                   <line className="air-cut" x1="180" y1="115" x2="180" y2="125" stroke="#c4cdd0" strokeWidth="1" strokeOpacity="0.85" />
                 </g>
