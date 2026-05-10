@@ -95,12 +95,15 @@ export default function ScrollReveal() {
         const pct = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
         progressBar.style.width = `${Math.min(100, Math.max(0, pct))}%`;
       }
-      // parallax (skip if reduced motion)
+      // parallax (skip if reduced motion). Read the *parent's* rect so
+      // the math doesn't feed back on the target's own transform.
       if (!reduceMotion) {
         const vh = window.innerHeight;
         const center = vh / 2;
         for (const target of parallaxTargets) {
-          const rect = target.getBoundingClientRect();
+          const parent = target.parentElement;
+          if (!parent) continue;
+          const rect = parent.getBoundingClientRect();
           const elCenter = rect.top + rect.height / 2;
           const distance = elCenter - center;
           const offset = -distance * 0.08;
@@ -131,17 +134,43 @@ export default function ScrollReveal() {
         t.isContentEditable
       );
     };
+    let releaseTimer: ReturnType<typeof setTimeout> | null = null;
+    const clearHoverSuppression = () => {
+      document.body.classList.remove("hover-suppressed");
+      window.removeEventListener("mousemove", clearHoverSuppression);
+      window.removeEventListener("touchstart", clearHoverSuppression);
+      if (releaseTimer !== null) {
+        clearTimeout(releaseTimer);
+        releaseTimer = null;
+      }
+    };
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.code !== "Space") return;
       if (isTextInput(e.target)) return;
       e.preventDefault();
-      if (!e.repeat) document.body.classList.add("is-corrupt-all");
+      if (!e.repeat) {
+        // Cancel any in-flight hover-suppression from a previous release.
+        clearHoverSuppression();
+        document.body.classList.add("is-corrupt-all");
+      }
     };
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.code !== "Space") return;
       if (isTextInput(e.target)) return;
       e.preventDefault();
       document.body.classList.remove("is-corrupt-all");
+      // Suppress hover until the user moves the mouse — otherwise the
+      // element under the cursor immediately re-engages :hover and
+      // stays corrupt while the other three return to pure.
+      document.body.classList.add("hover-suppressed");
+      window.addEventListener("mousemove", clearHoverSuppression, {
+        once: true,
+      });
+      window.addEventListener("touchstart", clearHoverSuppression, {
+        once: true,
+      });
+      // Safety: never leave hover suppressed for more than 1.5s.
+      releaseTimer = setTimeout(clearHoverSuppression, 1500);
     };
     // Use capture so we win over any focused element's default handling
     // (e.g., a focused rail anchor).
@@ -157,6 +186,7 @@ export default function ScrollReveal() {
       window.removeEventListener("resize", onScroll);
       window.removeEventListener("keydown", onKeyDown, { capture: true });
       window.removeEventListener("keyup", onKeyUp, { capture: true });
+      clearHoverSuppression();
     };
   }, []);
 

@@ -264,10 +264,12 @@ body {
 .element.is-corrupt .corrupt-layer { opacity: 1; }
 
 /* keyboard: hold Space to invert all elements at once.
-   While held, suppress pointer-events on the elements so the cursor
-   can't trigger or trap a per-element hover state — every element
-   reads the same global signal instead. */
-body.is-corrupt-all .element {
+   While held — and briefly after release until the mouse moves —
+   suppress pointer-events on the elements so the cursor can't trap a
+   per-element hover state. Without this, the element under the cursor
+   stays corrupt after release while the other three transition back. */
+body.is-corrupt-all .element,
+body.hover-suppressed .element {
   pointer-events: none;
 }
 body.is-corrupt-all .element .pure-layer { opacity: 0; }
@@ -401,7 +403,7 @@ body.is-corrupt-all .element-air .divider { background: var(--pale); }
 }
 .fire-pure-flame {
   transform-origin: 100px 220px;
-  transform-box: fill-box;
+  transform-box: view-box; /* origin in SVG user coords */
   animation: flameDrift 5s var(--ease-in-out) infinite;
 }
 
@@ -416,7 +418,7 @@ body.is-corrupt-all .element-air .divider { background: var(--pale); }
 }
 .fire-corrupt-flame {
   transform-origin: 100px 220px;
-  transform-box: fill-box;
+  transform-box: view-box;
   animation: flameThrash 1.4s var(--ease-in-out) infinite;
 }
 
@@ -429,7 +431,7 @@ body.is-corrupt-all .element-air .divider { background: var(--pale); }
 }
 .fire-flicker {
   animation: coreShimmer 1.8s var(--ease-in-out) infinite;
-  transform-origin: 100px 218px;
+  transform-origin: 50% 100%; /* bottom center of the path's bbox */
   transform-box: fill-box;
 }
 
@@ -443,7 +445,7 @@ body.is-corrupt-all .element-air .divider { background: var(--pale); }
 }
 .fire-corrupt-flicker {
   animation: coreThrash 0.9s var(--ease-in-out) infinite;
-  transform-origin: 100px 220px;
+  transform-origin: 50% 100%;
   transform-box: fill-box;
 }
 
@@ -474,7 +476,7 @@ body.is-corrupt-all .element-air .divider { background: var(--pale); }
 }
 .fire-tip {
   animation: tipWavePure 2.4s var(--ease-in-out) infinite;
-  transform-origin: 100px 110px;
+  transform-origin: 50% 100%;
   transform-box: fill-box;
 }
 
@@ -485,7 +487,7 @@ body.is-corrupt-all .element-air .divider { background: var(--pale); }
 }
 .fire-tip-corrupt {
   animation: tipWaveCorrupt 1.2s var(--ease-in-out) infinite;
-  transform-origin: 100px 110px;
+  transform-origin: 50% 100%;
   transform-box: fill-box;
 }
 
@@ -573,7 +575,8 @@ body.is-corrupt-all .element-earth .earth-crack-4 { stroke-dashoffset: 0; transi
   100% { transform: translate(-2px, -220px) scale(1, 1.9); opacity: 0; }
 }
 .breath {
-  transform-origin: center;
+  /* scale from the wisp's base so it elongates upward, not from its center */
+  transform-origin: 50% 100%;
   transform-box: fill-box;
 }
 .breath-1 { animation: riseA 7s linear infinite; }
