@@ -18,8 +18,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kelipot.vercel.app"),
   title: "Klippot — Four Corruptions",
   description: "An inquiry in four movements.",
+  openGraph: {
+    title: "Klippot — Four Corruptions",
+    description: "An inquiry in four movements.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Klippot — Four Corruptions",
+    description: "An inquiry in four movements.",
+  },
 };
 
 export const viewport: Viewport = {

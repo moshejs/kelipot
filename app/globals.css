@@ -65,6 +65,26 @@ body {
   padding: 0 32px;
 }
 
+/* ====================== READING PROGRESS ====================== */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: transparent;
+  z-index: 30;
+  pointer-events: none;
+}
+.reading-progress-bar {
+  height: 100%;
+  width: 0;
+  background: var(--ember);
+  opacity: 0.75;
+  transition: width 80ms linear;
+  box-shadow: 0 0 6px rgba(214, 138, 85, 0.4);
+}
+
 /* ====================== HERO ====================== */
 .hero {
   min-height: 96vh;
@@ -73,6 +93,19 @@ body {
   justify-content: center;
   padding: 120px 0 80px;
   position: relative;
+}
+
+.sigil {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 36px;
+  color: var(--fg-faint);
+  opacity: 0;
+  animation: sigilFade 1100ms var(--ease-out) 100ms forwards;
+}
+
+@keyframes sigilFade {
+  to { opacity: 1; }
 }
 
 .eyebrow {
@@ -160,15 +193,20 @@ body {
   background: var(--fg-faint);
 }
 
+.hero .scroll-cue .key {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid var(--fg-faint);
+  border-radius: 2px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  margin: 0 4px;
+  color: var(--fg-mute);
+}
+
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ====================== ELEMENT PANELS ====================== */
@@ -192,6 +230,12 @@ body {
   max-width: 380px;
 }
 
+.element-art-parallax {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
 .element-art-wrap svg {
   position: absolute;
   inset: 0;
@@ -211,21 +255,17 @@ body {
 
 /* hover gates: only on devices that actually hover */
 @media (hover: hover) and (pointer: fine) {
-  .element:hover .pure-layer {
-    opacity: 0;
-  }
-  .element:hover .corrupt-layer {
-    opacity: 1;
-  }
+  .element:hover .pure-layer { opacity: 0; }
+  .element:hover .corrupt-layer { opacity: 1; }
 }
 
 /* on touch, alternate via .is-corrupt class toggled on tap */
-.element.is-corrupt .pure-layer {
-  opacity: 0;
-}
-.element.is-corrupt .corrupt-layer {
-  opacity: 1;
-}
+.element.is-corrupt .pure-layer { opacity: 0; }
+.element.is-corrupt .corrupt-layer { opacity: 1; }
+
+/* keyboard: hold Space to invert all elements at once */
+body.is-corrupt-all .element .pure-layer { opacity: 0; }
+body.is-corrupt-all .element .corrupt-layer { opacity: 1; }
 
 .element-text .roman {
   font-family: var(--font-inter), sans-serif;
@@ -240,9 +280,7 @@ body {
   gap: 14px;
 }
 
-.element-text .roman .num {
-  color: var(--fg-mute);
-}
+.element-text .roman .num { color: var(--fg-mute); }
 
 .element-text .roman .glyph {
   display: inline-block;
@@ -286,6 +324,22 @@ body {
   letter-spacing: -0.005em;
 }
 
+/* drop cap on each corrupt line */
+.element-text .corrupt-line::first-letter {
+  font-size: 2.6em;
+  line-height: 0.9;
+  float: left;
+  font-style: italic;
+  font-weight: 400;
+  padding: 0.05em 0.12em 0 0;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+.element-fire .corrupt-line::first-letter { color: var(--ember); }
+.element-water .corrupt-line::first-letter { color: var(--indigo); }
+.element-earth .corrupt-line::first-letter { color: var(--clay); }
+.element-air .corrupt-line::first-letter { color: var(--pale); }
+
 .element-text .divider {
   width: 28px;
   height: 1px;
@@ -295,14 +349,18 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .element:hover .divider {
-    width: 56px;
-  }
+  .element:hover .divider { width: 56px; }
   .element-fire:hover .divider { background: var(--ember); }
   .element-water:hover .divider { background: var(--indigo); }
   .element-earth:hover .divider { background: var(--clay); }
   .element-air:hover .divider { background: var(--pale); }
 }
+
+body.is-corrupt-all .element .divider { width: 56px; }
+body.is-corrupt-all .element-fire .divider { background: var(--ember); }
+body.is-corrupt-all .element-water .divider { background: var(--indigo); }
+body.is-corrupt-all .element-earth .divider { background: var(--clay); }
+body.is-corrupt-all .element-air .divider { background: var(--pale); }
 
 /* ====================== REVEAL ON SCROLL ====================== */
 .reveal {
@@ -320,69 +378,133 @@ body {
   transform: translateY(14px);
   transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out);
 }
-.reveal-stagger.in-view > *:nth-child(1) {
-  transition-delay: 0ms; opacity: 1; transform: translateY(0);
-}
-.reveal-stagger.in-view > *:nth-child(2) {
-  transition-delay: 60ms; opacity: 1; transform: translateY(0);
-}
-.reveal-stagger.in-view > *:nth-child(3) {
-  transition-delay: 120ms; opacity: 1; transform: translateY(0);
-}
-.reveal-stagger.in-view > *:nth-child(4) {
-  transition-delay: 180ms; opacity: 1; transform: translateY(0);
-}
-.reveal-stagger.in-view > *:nth-child(5) {
-  transition-delay: 240ms; opacity: 1; transform: translateY(0);
-}
-.reveal-stagger.in-view > *:nth-child(6) {
-  transition-delay: 300ms; opacity: 1; transform: translateY(0);
-}
+.reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0ms;   opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(2) { transition-delay: 60ms;  opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(3) { transition-delay: 120ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(4) { transition-delay: 180ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(5) { transition-delay: 240ms; opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(6) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
 
 /* ====================== FIRE ART ====================== */
 @keyframes flameDrift {
-  0%, 100% { transform: translateY(0) scaleY(1); }
-  50% { transform: translateY(-2px) scaleY(1.02); }
+  0%, 100% { transform: translateY(0) scaleY(1) scaleX(1); }
+  17% { transform: translateY(-1px) scaleY(1.02) scaleX(0.99); }
+  38% { transform: translateY(-3px) scaleY(1.05) scaleX(0.96); }
+  56% { transform: translateY(-2px) scaleY(1.04) scaleX(0.97); }
+  78% { transform: translateY(-1px) scaleY(1.02) scaleX(0.99); }
 }
 .fire-pure-flame {
   transform-origin: 100px 220px;
+  transform-box: fill-box;
   animation: flameDrift 5s var(--ease-in-out) infinite;
 }
+
 @keyframes flameThrash {
-  0%, 100% { transform: translateY(0) scaleY(1) skewX(0deg); }
-  25% { transform: translateY(-3px) scaleY(1.06) skewX(-1.5deg); }
-  50% { transform: translateY(0) scaleY(0.98) skewX(0deg); }
-  75% { transform: translateY(-2px) scaleY(1.04) skewX(1.5deg); }
+  0%, 100% { transform: translateY(0) scaleY(1) scaleX(1) skewX(0deg); }
+  16% { transform: translateY(-3px) scaleY(1.07) scaleX(0.94) skewX(-2.2deg); }
+  32% { transform: translateY(-1px) scaleY(0.96) scaleX(1.04) skewX(1.5deg); }
+  47% { transform: translateY(-4px) scaleY(1.08) scaleX(0.93) skewX(-1deg); }
+  61% { transform: translateY(-2px) scaleY(1.04) scaleX(0.98) skewX(2.5deg); }
+  76% { transform: translateY(-3.5px) scaleY(1.06) scaleX(0.95) skewX(-1.8deg); }
+  88% { transform: translateY(-1.5px) scaleY(1.02) scaleX(0.99) skewX(1deg); }
 }
 .fire-corrupt-flame {
   transform-origin: 100px 220px;
+  transform-box: fill-box;
   animation: flameThrash 1.4s var(--ease-in-out) infinite;
 }
 
-@keyframes flicker {
-  0%, 100% { opacity: 0.95; }
-  47% { opacity: 0.78; }
-  53% { opacity: 1; }
-  62% { opacity: 0.7; }
-  75% { opacity: 0.92; }
+@keyframes coreShimmer {
+  0%, 100% { opacity: 0.95; transform: scaleY(1); }
+  20% { opacity: 0.78; transform: scaleY(0.97); }
+  40% { opacity: 1; transform: scaleY(1.03); }
+  60% { opacity: 0.7; transform: scaleY(0.96); }
+  80% { opacity: 0.92; transform: scaleY(1.02); }
 }
 .fire-flicker {
-  animation: flicker 1.8s var(--ease-in-out) infinite;
-  transform-origin: 100px 220px;
+  animation: coreShimmer 1.8s var(--ease-in-out) infinite;
+  transform-origin: 100px 218px;
+  transform-box: fill-box;
 }
 
-@keyframes flickerHard {
-  0%, 100% { opacity: 0.95; }
-  18% { opacity: 0.5; }
-  35% { opacity: 1; }
-  52% { opacity: 0.4; }
-  72% { opacity: 0.85; }
-  88% { opacity: 0.55; }
+@keyframes coreThrash {
+  0%, 100% { opacity: 0.95; transform: scaleY(1) scaleX(1); }
+  18% { opacity: 0.5; transform: scaleY(0.93) scaleX(1.04); }
+  35% { opacity: 1; transform: scaleY(1.05) scaleX(0.96); }
+  52% { opacity: 0.4; transform: scaleY(0.88) scaleX(1.08); }
+  72% { opacity: 0.85; transform: scaleY(1.03) scaleX(0.97); }
+  88% { opacity: 0.55; transform: scaleY(0.95) scaleX(1.03); }
 }
 .fire-corrupt-flicker {
-  animation: flickerHard 0.9s var(--ease-in-out) infinite;
+  animation: coreThrash 0.9s var(--ease-in-out) infinite;
   transform-origin: 100px 220px;
+  transform-box: fill-box;
 }
+
+@keyframes haloPulsePure {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.05); }
+}
+.fire-halo-pure {
+  animation: haloPulsePure 4s var(--ease-in-out) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes haloPulseCorrupt {
+  0%, 100% { opacity: 0.95; transform: scale(1); }
+  35% { opacity: 0.7; transform: scale(0.96); }
+  62% { opacity: 1; transform: scale(1.07); }
+}
+.fire-halo-corrupt {
+  animation: haloPulseCorrupt 1.6s var(--ease-in-out) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes tipWavePure {
+  0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.7; }
+  50% { transform: scaleY(0.85) translateY(2px); opacity: 0.5; }
+}
+.fire-tip {
+  animation: tipWavePure 2.4s var(--ease-in-out) infinite;
+  transform-origin: 100px 110px;
+  transform-box: fill-box;
+}
+
+@keyframes tipWaveCorrupt {
+  0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.7; }
+  30% { transform: scaleY(0.7) translateY(4px); opacity: 0.4; }
+  60% { transform: scaleY(1.1) translateY(-2px); opacity: 0.85; }
+}
+.fire-tip-corrupt {
+  animation: tipWaveCorrupt 1.2s var(--ease-in-out) infinite;
+  transform-origin: 100px 110px;
+  transform-box: fill-box;
+}
+
+@keyframes emberRiseA {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: 0.85; }
+  60% { opacity: 0.7; }
+  100% { transform: translate(2px, -50px); opacity: 0; }
+}
+@keyframes emberRiseB {
+  0% { transform: translate(0, 0); opacity: 0; }
+  18% { opacity: 0.85; }
+  55% { opacity: 0.65; }
+  100% { transform: translate(-3px, -55px); opacity: 0; }
+}
+.ember {
+  transform-box: fill-box;
+}
+.ember-1 { animation: emberRiseA 3.5s linear infinite; }
+.ember-2 { animation: emberRiseB 4.2s linear -1s infinite; }
+.ember-3 { animation: emberRiseA 3s linear -1.5s infinite; }
+.ember-4 { animation: emberRiseB 4s linear -2.3s infinite; }
+.ember-5 { animation: emberRiseA 3.8s linear -0.7s infinite; }
+.ember-6 { animation: emberRiseB 3.3s linear -2.8s infinite; }
+.ember-7 { animation: emberRiseA 4.5s linear -1.8s infinite; }
 
 /* ====================== WATER ART ====================== */
 @keyframes ripple {
@@ -424,24 +546,29 @@ body {
 .element-earth.is-corrupt .earth-crack-2 { stroke-dashoffset: 0; transition-delay: 280ms; }
 .element-earth.is-corrupt .earth-crack-3 { stroke-dashoffset: 0; transition-delay: 460ms; }
 .element-earth.is-corrupt .earth-crack-4 { stroke-dashoffset: 0; transition-delay: 640ms; }
+body.is-corrupt-all .element-earth .earth-crack-1 { stroke-dashoffset: 0; transition-delay: 100ms; }
+body.is-corrupt-all .element-earth .earth-crack-2 { stroke-dashoffset: 0; transition-delay: 280ms; }
+body.is-corrupt-all .element-earth .earth-crack-3 { stroke-dashoffset: 0; transition-delay: 460ms; }
+body.is-corrupt-all .element-earth .earth-crack-4 { stroke-dashoffset: 0; transition-delay: 640ms; }
 
 /* ====================== AIR ART ====================== */
 @keyframes riseA {
-  0% { transform: translate(0, 60px); opacity: 0; }
-  15% { opacity: 0.8; }
-  40% { transform: translate(4px, -50px); opacity: 0.8; }
-  70% { transform: translate(-3px, -140px); opacity: 0.45; }
-  100% { transform: translate(2px, -220px); opacity: 0; }
+  0% { transform: translate(0, 60px) scale(1, 1); opacity: 0; }
+  10% { opacity: 0.85; }
+  35% { transform: translate(4px, -40px) scale(1, 1.3); opacity: 0.85; }
+  65% { transform: translate(-3px, -130px) scale(1, 1.6); opacity: 0.45; }
+  100% { transform: translate(2px, -220px) scale(1, 1.9); opacity: 0; }
 }
 @keyframes riseB {
-  0% { transform: translate(0, 60px); opacity: 0; }
-  15% { opacity: 0.8; }
-  40% { transform: translate(-4px, -50px); opacity: 0.8; }
-  70% { transform: translate(3px, -140px); opacity: 0.45; }
-  100% { transform: translate(-2px, -220px); opacity: 0; }
+  0% { transform: translate(0, 60px) scale(1, 1); opacity: 0; }
+  10% { opacity: 0.85; }
+  35% { transform: translate(-4px, -40px) scale(1, 1.3); opacity: 0.85; }
+  65% { transform: translate(3px, -130px) scale(1, 1.6); opacity: 0.45; }
+  100% { transform: translate(-2px, -220px) scale(1, 1.9); opacity: 0; }
 }
 .breath {
   transform-origin: center;
+  transform-box: fill-box;
 }
 .breath-1 { animation: riseA 7s linear infinite; }
 .breath-2 { animation: riseB 7s linear -1s infinite; }
@@ -451,15 +578,51 @@ body {
 .breath-6 { animation: riseB 7s linear -5s infinite; }
 .breath-7 { animation: riseA 7s linear -6s infinite; }
 
+@keyframes columnSway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+}
+.element-air .pure-layer {
+  animation: columnSway 9s var(--ease-in-out) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes sourceBreathe {
+  0%, 100% { stroke-opacity: 0.3; transform: scaleX(1); }
+  50% { stroke-opacity: 0.55; transform: scaleX(1.08); }
+}
+.air-source {
+  animation: sourceBreathe 4.5s var(--ease-in-out) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
 .air-cut {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
   transition: stroke-dashoffset 600ms var(--ease-out);
+  animation: cutThrob 3s var(--ease-in-out) infinite;
+}
+@keyframes cutThrob {
+  0%, 100% { stroke-opacity: 0.85; }
+  50% { stroke-opacity: 1; }
 }
 @media (hover: hover) and (pointer: fine) {
   .element-air:hover .air-cut { stroke-dashoffset: 0; transition-delay: 200ms; }
 }
 .element-air.is-corrupt .air-cut { stroke-dashoffset: 0; transition-delay: 200ms; }
+body.is-corrupt-all .element-air .air-cut { stroke-dashoffset: 0; transition-delay: 200ms; }
+
+@keyframes tickThrob {
+  0%, 100% { stroke-opacity: 0.85; transform: scale(1); }
+  50% { stroke-opacity: 1; transform: scale(1.25); }
+}
+.air-tick {
+  animation: tickThrob 1.6s var(--ease-in-out) infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
 
 /* ====================== CODA ====================== */
 .coda {
@@ -549,24 +712,11 @@ body {
   opacity: 0.5;
   transition: width 400ms var(--ease-out), opacity 400ms var(--ease-out);
 }
-.rail-item:hover {
-  color: var(--fg-mute);
-}
-.rail-item:hover::before {
-  width: 18px;
-  opacity: 1;
-}
-.rail-item.active {
-  color: var(--fg);
-}
-.rail-item.active::before {
-  width: 24px;
-  opacity: 1;
-}
-.rail-num {
-  display: inline-block;
-  min-width: 22px;
-}
+.rail-item:hover { color: var(--fg-mute); }
+.rail-item:hover::before { width: 18px; opacity: 1; }
+.rail-item.active { color: var(--fg); }
+.rail-item.active::before { width: 24px; opacity: 1; }
+.rail-num { display: inline-block; min-width: 22px; }
 .rail-name {
   opacity: 0;
   transform: translateX(-4px);
@@ -606,6 +756,7 @@ footer {
   .hero { min-height: 86vh; padding: 88px 0 64px; }
   .hero .scroll-cue { margin-top: 64px; }
   .coda { padding: 120px 0; }
+  .element-text .corrupt-line::first-letter { font-size: 2.2em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -616,8 +767,13 @@ footer {
   }
   .fire-pure-flame, .fire-corrupt-flame,
   .fire-flicker, .fire-corrupt-flicker,
+  .fire-halo-pure, .fire-halo-corrupt,
+  .fire-tip, .fire-tip-corrupt,
+  .ember,
   .ripple-1, .ripple-2, .ripple-3,
   .pull-1, .pull-2, .pull-3,
-  .breath { animation: none !important; }
+  .breath, .air-source, .air-cut, .air-tick,
+  .element-air .pure-layer { animation: none !important; }
   html { scroll-behavior: auto; }
+  .element-art-parallax { transform: none !important; }
 }

@@ -20,9 +20,7 @@ export default function ScrollReveal() {
       .querySelectorAll(".reveal, .reveal-stagger")
       .forEach((el) => revealIO.observe(el));
 
-    // 2. Rail active-section tracking
-    // A 1px-tall band at the vertical center of the viewport — whichever
-    // section overlaps it is the active one.
+    // 2. Rail active-section tracking — center-of-viewport detection
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>(".element")
     );
@@ -63,8 +61,8 @@ export default function ScrollReveal() {
       heroIO.observe(hero);
     }
 
-    // 4. Touch fallback: tap an element to toggle its corrupt state.
-    // Ignore clicks that originate inside the rail nav.
+    // 4. Touch fallback — tap an element to toggle its corrupt state.
+    // Ignore taps on the rail nav.
     const cleanups: Array<() => void> = [];
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       document.querySelectorAll<HTMLElement>(".element").forEach((el) => {
@@ -77,11 +75,83 @@ export default function ScrollReveal() {
       });
     }
 
+    // 5. Reading progress + parallax on scroll, throttled to RAF
+    const progressBar = document.querySelector<HTMLElement>(
+      ".reading-progress-bar"
+    );
+    const parallaxTargets = Array.from(
+      document.querySelectorAll<HTMLElement>(".element-art-parallax")
+    );
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    let ticking = false;
+    const updateScroll = () => {
+      // reading progress
+      if (progressBar) {
+        const docHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+        progressBar.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+      }
+      // parallax (skip if reduced motion)
+      if (!reduceMotion) {
+        const vh = window.innerHeight;
+        const center = vh / 2;
+        for (const target of parallaxTargets) {
+          const rect = target.getBoundingClientRect();
+          const elCenter = rect.top + rect.height / 2;
+          const distance = elCenter - center;
+          const offset = -distance * 0.08;
+          target.style.transform = `translateY(${offset.toFixed(2)}px)`;
+        }
+      }
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    updateScroll();
+
+    // 6. Keyboard — hold Space to invert all elements
+    const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.code === "Space" && !e.repeat) {
+        e.preventDefault();
+        document.body.classList.add("is-corrupt-all");
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        document.body.classList.remove("is-corrupt-all");
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
     return () => {
       revealIO.disconnect();
       sectionIO.disconnect();
       heroIO?.disconnect();
       cleanups.forEach((fn) => fn());
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
     };
   }, []);
 
