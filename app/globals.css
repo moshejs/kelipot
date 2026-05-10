@@ -263,7 +263,13 @@ body {
 .element.is-corrupt .pure-layer { opacity: 0; }
 .element.is-corrupt .corrupt-layer { opacity: 1; }
 
-/* keyboard: hold Space to invert all elements at once */
+/* keyboard: hold Space to invert all elements at once.
+   While held, suppress pointer-events on the elements so the cursor
+   can't trigger or trap a per-element hover state — every element
+   reads the same global signal instead. */
+body.is-corrupt-all .element {
+  pointer-events: none;
+}
 body.is-corrupt-all .element .pure-layer { opacity: 0; }
 body.is-corrupt-all .element .corrupt-layer { opacity: 1; }
 
