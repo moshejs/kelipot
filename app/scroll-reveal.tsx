@@ -119,29 +119,34 @@ export default function ScrollReveal() {
     window.addEventListener("resize", onScroll, { passive: true });
     updateScroll();
 
-    // 6. Keyboard — hold Space to invert all elements
+    // 6. Keyboard — hold Space to invert all elements.
+    // preventDefault on every keydown (including autorepeats) so the
+    // browser doesn't scroll while held; only flip state on the first one.
+    const isTextInput = (el: EventTarget | null) => {
+      const t = el as HTMLElement | null;
+      if (!t) return false;
+      return (
+        t.tagName === "INPUT" ||
+        t.tagName === "TEXTAREA" ||
+        t.isContentEditable
+      );
+    };
     const onKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
-      if (e.code === "Space" && !e.repeat) {
-        e.preventDefault();
-        document.body.classList.add("is-corrupt-all");
-      }
+      if (e.code !== "Space") return;
+      if (isTextInput(e.target)) return;
+      e.preventDefault();
+      if (!e.repeat) document.body.classList.add("is-corrupt-all");
     };
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Space") {
-        document.body.classList.remove("is-corrupt-all");
-      }
+      if (e.code !== "Space") return;
+      if (isTextInput(e.target)) return;
+      e.preventDefault();
+      document.body.classList.remove("is-corrupt-all");
     };
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
+    // Use capture so we win over any focused element's default handling
+    // (e.g., a focused rail anchor).
+    window.addEventListener("keydown", onKeyDown, { capture: true });
+    window.addEventListener("keyup", onKeyUp, { capture: true });
 
     return () => {
       revealIO.disconnect();
@@ -150,8 +155,8 @@ export default function ScrollReveal() {
       cleanups.forEach((fn) => fn());
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("keydown", onKeyDown, { capture: true });
+      window.removeEventListener("keyup", onKeyUp, { capture: true });
     };
   }, []);
 
