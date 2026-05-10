@@ -3,6 +3,26 @@ import ScrollReveal from "./scroll-reveal";
 export default function Home() {
   return (
     <>
+      {/* ====================== RAIL ====================== */}
+      <nav className="rail" aria-label="Section navigation">
+        <a href="#fire" className="rail-item" data-index="0" aria-label="Fire">
+          <span className="rail-num">I</span>
+          <span className="rail-name">Fire</span>
+        </a>
+        <a href="#water" className="rail-item" data-index="1" aria-label="Water">
+          <span className="rail-num">II</span>
+          <span className="rail-name">Water</span>
+        </a>
+        <a href="#earth" className="rail-item" data-index="2" aria-label="Earth">
+          <span className="rail-num">III</span>
+          <span className="rail-name">Earth</span>
+        </a>
+        <a href="#air" className="rail-item" data-index="3" aria-label="Air">
+          <span className="rail-num">IV</span>
+          <span className="rail-name">Air</span>
+        </a>
+      </nav>
+
       {/* ====================== HERO ====================== */}
       <section className="hero container">
         <div className="eyebrow">
@@ -23,7 +43,7 @@ export default function Home() {
       </section>
 
       {/* ====================== I. FIRE ====================== */}
-      <section className="element element-fire">
+      <section className="element element-fire" id="fire">
         <div className="container">
           <div className="element-grid">
             <div className="element-art-wrap reveal">
@@ -78,6 +98,7 @@ export default function Home() {
                       fill="url(#fire-pure-grad)"
                     />
                     <path
+                      className="fire-flicker"
                       d="M 88 218 C 74 215 62 188 72 158 C 80 134 90 130 90 108 C 90 90 96 76 100 62 C 104 76 110 90 110 108 C 110 130 120 134 128 158 C 138 188 126 215 112 218 L 88 218 Z"
                       fill="url(#fire-pure-core)"
                     />
@@ -100,6 +121,7 @@ export default function Home() {
                       fill="url(#fire-corrupt-grad)"
                     />
                     <path
+                      className="fire-corrupt-flicker"
                       d="M 86 220 C 64 218 46 192 60 156 C 70 130 86 124 82 100 C 78 78 90 60 96 40 Q 100 30 104 40 C 110 60 122 78 118 100 C 114 124 130 130 140 156 C 154 192 136 218 114 220 L 86 220 Z"
                       fill="url(#fire-corrupt-core)"
                     />
@@ -143,7 +165,7 @@ export default function Home() {
       </section>
 
       {/* ====================== II. WATER ====================== */}
-      <section className="element element-water">
+      <section className="element element-water" id="water">
         <div className="container">
           <div className="element-grid">
             <div className="element-art-wrap reveal">
@@ -228,7 +250,7 @@ export default function Home() {
       </section>
 
       {/* ====================== III. EARTH ====================== */}
-      <section className="element element-earth">
+      <section className="element element-earth" id="earth">
         <div className="container">
           <div className="element-grid">
             <div className="element-art-wrap reveal">
@@ -344,7 +366,7 @@ export default function Home() {
       </section>
 
       {/* ====================== IV. AIR ====================== */}
-      <section className="element element-air">
+      <section className="element element-air" id="air">
         <div className="container">
           <div className="element-grid">
             <div className="element-art-wrap reveal">
