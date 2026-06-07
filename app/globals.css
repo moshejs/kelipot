@@ -146,13 +146,26 @@ body {
   animation: fadeUp 1100ms var(--ease-out) 380ms forwards;
 }
 
+.hero h1 .hebrew {
+  display: block;
+  font-family: var(--font-hebrew), "Times New Roman", serif;
+  font-size: 0.28em;
+  font-weight: 300;
+  color: var(--fg-mute);
+  letter-spacing: 0;
+  margin-top: 0.18em;
+  line-height: 1.1;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
 .hero h1 .corrupt {
   font-style: italic;
   font-weight: 400;
   color: var(--ember);
   display: block;
   font-size: 0.7em;
-  margin-top: 0.05em;
+  margin-top: 0.15em;
   letter-spacing: -0.01em;
 }
 
@@ -202,6 +215,18 @@ body {
   letter-spacing: 0.18em;
   margin: 0 4px;
   color: var(--fg-mute);
+}
+
+.hero .scroll-cue .hint-touch {
+  display: none;
+}
+@media (hover: none) {
+  .hero .scroll-cue .hint-desktop {
+    display: none;
+  }
+  .hero .scroll-cue .hint-touch {
+    display: inline;
+  }
 }
 
 @keyframes fadeUp {
@@ -723,6 +748,15 @@ body.is-corrupt-all .element-air .air-cut { stroke-dashoffset: 0; transition-del
 }
 .rail-item:hover { color: var(--fg-mute); }
 .rail-item:hover::before { width: 18px; opacity: 1; }
+.rail-item:focus-visible {
+  outline: none;
+  color: var(--fg);
+}
+.rail-item:focus-visible::before {
+  width: 24px;
+  opacity: 1;
+  background: var(--ember);
+}
 .rail-item.active { color: var(--fg); }
 .rail-item.active::before { width: 24px; opacity: 1; }
 .rail-num { display: inline-block; min-width: 22px; }
@@ -732,12 +766,84 @@ body.is-corrupt-all .element-air .air-cut { stroke-dashoffset: 0; transition-del
   transition: opacity 400ms var(--ease-out), transform 400ms var(--ease-out);
 }
 .rail-item.active .rail-name,
-.rail-item:hover .rail-name {
+.rail-item:hover .rail-name,
+.rail-item:focus-visible .rail-name {
   opacity: 1;
   transform: translateX(0);
 }
 @media (max-width: 1100px) {
   .rail { display: none; }
+}
+
+/* ====================== 404 ====================== */
+.not-found {
+  min-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 32px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.not-found .mark {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 40px;
+}
+.not-found h1 {
+  font-size: clamp(40px, 7vw, 84px);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin-bottom: 28px;
+}
+.not-found h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ember);
+}
+.not-found p {
+  font-size: clamp(18px, 2vw, 22px);
+  font-style: italic;
+  color: var(--fg-mute);
+  line-height: 1.5;
+  max-width: 480px;
+  margin: 0 auto 56px;
+}
+.not-found a {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  text-decoration: none;
+  transition: color 400ms var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.not-found a::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  transition: width 400ms var(--ease-out);
+}
+.not-found a:hover,
+.not-found a:focus-visible {
+  color: var(--fg);
+  outline: none;
+}
+.not-found a:hover::before,
+.not-found a:focus-visible::before {
+  width: 40px;
+  background: var(--ember);
 }
 
 /* ====================== FOOTER ====================== */

@@ -3,6 +3,9 @@ import { ImageResponse } from "next/og";
 export const alt = "Klippot — Four Corruptions";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+// Required for `output: 'export'` (GitHub Pages build): tells Next this
+// route renders to a single static asset at build time, not at request time.
+export const dynamic = "force-static";
 
 export default async function Image() {
   return new ImageResponse(

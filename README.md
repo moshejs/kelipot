@@ -60,7 +60,12 @@ A few of the choices, in case they're invisible:
 
 ## Live
 
-Repo: <https://github.com/moshejs/kelipot>
+- **Site:** <https://moshejs.github.io/kelipot/>
+- **Repo:** <https://github.com/moshejs/kelipot>
+
+Built and deployed automatically on every push to `main` by the
+GitHub Actions workflow in `.github/workflows/deploy.yml` — Next.js
+static export → GitHub Pages.
 
 ## Getting started
 

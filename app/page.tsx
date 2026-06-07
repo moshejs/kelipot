@@ -41,6 +41,7 @@ export default function Home() {
         </div>
         <h1>
           Klippot.
+          <span className="hebrew" lang="he" dir="rtl">קליפות</span>
           <span className="corrupt">Four corruptions.</span>
         </h1>
         <p className="lede">
@@ -49,7 +50,10 @@ export default function Home() {
         </p>
         <div className="scroll-cue">
           <span className="line"></span>
-          Hover each form · hold <span className="key">space</span> to invert
+          <span className="hint-desktop">
+            Hover each form · hold <span className="key">space</span> to invert
+          </span>
+          <span className="hint-touch">Tap each form to reveal</span>
         </div>
       </section>
 

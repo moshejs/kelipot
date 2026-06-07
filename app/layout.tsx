@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Cormorant_Garamond, Frank_Ruhl_Libre, Inter } from "next/font/google";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -17,8 +17,15 @@ const inter = Inter({
   display: "swap",
 });
 
+const hebrew = Frank_Ruhl_Libre({
+  subsets: ["hebrew", "latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-hebrew",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://kelipot.vercel.app"),
+  metadataBase: new URL("https://moshejs.github.io"),
   title: "Klippot — Four Corruptions",
   description: "An inquiry in four movements.",
   openGraph: {
@@ -44,7 +51,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${inter.variable} ${hebrew.variable}`}
+    >
       <body>{children}</body>
     </html>
   );
