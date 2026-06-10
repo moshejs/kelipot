@@ -107,12 +107,38 @@ body {
   height: 38px;
   margin-bottom: 36px;
   color: var(--line);
+}
+
+/* the field appears first; then the count is drawn onto it — fire's triangle,
+   water's, the bar — the same drawn-stroke grammar as earth's cracks and
+   air's cut, taught from the first second. The circle is never "drawn"
+   (a self-drawing circle reads as a spinner); it only fades. */
+.sigil .sigil-circle {
   opacity: 0;
-  animation: sigilFade 1100ms var(--ease-out) 100ms forwards;
+  animation: sigilFade 900ms var(--ease-out) 100ms forwards;
 }
 
 @keyframes sigilFade {
   to { opacity: 1; }
+}
+
+@keyframes sigilDraw {
+  to { stroke-dashoffset: 0; }
+}
+.sigil .sigil-fire {
+  stroke-dasharray: 60; /* triangle perimeter ≈ 59.5 */
+  stroke-dashoffset: 60;
+  animation: sigilDraw 480ms var(--ease-slow) 300ms forwards;
+}
+.sigil .sigil-water {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: sigilDraw 480ms var(--ease-slow) 640ms forwards;
+}
+.sigil .sigil-bar {
+  stroke-dasharray: 20; /* bar length = 20 */
+  stroke-dashoffset: 20;
+  animation: sigilDraw 320ms var(--ease-slow) 1040ms forwards;
 }
 
 .eyebrow {
@@ -333,13 +359,15 @@ body {
   .element-water:hover .corrupt-layer { transform: scale(1); }
   .element-water:hover .ripple-1,
   .element-water:hover .ripple-2,
-  .element-water:hover .ripple-3 { animation-play-state: paused; }
+  .element-water:hover .ripple-3,
+  .element-water:hover .water-drop { animation-play-state: paused; }
 }
 .element-water.is-corrupt .pure-layer    { transform: scale(0.4); }
 .element-water.is-corrupt .corrupt-layer { transform: scale(1); }
 .element-water.is-corrupt .ripple-1,
 .element-water.is-corrupt .ripple-2,
-.element-water.is-corrupt .ripple-3 { animation-play-state: paused; }
+.element-water.is-corrupt .ripple-3,
+.element-water.is-corrupt .water-drop { animation-play-state: paused; }
 
 /* AIR — engaging stills the rising breath: it freezes mid-rise, handing off
    to the capped corrupt wisps trapped under the cut. */
@@ -376,7 +404,8 @@ body.is-corrupt-all .element-air   .corrupt-layer { opacity: 1; transform: scale
 body.is-corrupt-all .element-water .pure-layer { transform: scale(0.4); }
 body.is-corrupt-all .element-water .ripple-1,
 body.is-corrupt-all .element-water .ripple-2,
-body.is-corrupt-all .element-water .ripple-3 { animation-play-state: paused; }
+body.is-corrupt-all .element-water .ripple-3,
+body.is-corrupt-all .element-water .water-drop { animation-play-state: paused; }
 body.is-corrupt-all .element-air .pure-layer,
 body.is-corrupt-all .element-air .pure-layer .breath { animation-play-state: paused; }
 
@@ -507,12 +536,6 @@ body.is-releasing .element-earth .divider { transition-delay: 110ms; }
 body.is-releasing .element-water .divider { transition-delay: 220ms; }
 body.is-releasing .element-fire .divider { transition-delay: 330ms; }
 
-/* Hover is the act of "looking inside" — the cursor names it before it's read.
-   Only on true hover/fine-pointer devices; not motion, so no PRM concern. */
-@media (hover: hover) and (pointer: fine) {
-  .element-art-wrap { cursor: help; }
-}
-
 /* ====================== REVEAL ON SCROLL ====================== */
 /* The hidden initial states apply only when scripting is available to undo
    them — with JS off (or failed), the piece stands fully visible, unanimated. */
@@ -598,16 +621,34 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
   transform-box: fill-box;
 }
 
-@keyframes coreThrash {
-  0%, 100% { opacity: 0.95; transform: scaleY(1) scaleX(1); }
-  18% { opacity: 0.5; transform: scaleY(0.93) scaleX(1.04); }
-  35% { opacity: 1; transform: scaleY(1.05) scaleX(0.96); }
-  52% { opacity: 0.4; transform: scaleY(0.88) scaleX(1.08); }
-  72% { opacity: 0.85; transform: scaleY(1.03) scaleX(0.97); }
-  88% { opacity: 0.55; transform: scaleY(0.95) scaleX(1.03); }
+/* The old 0.9s gutter run two-and-a-half times — then once per 3.6s cycle
+   the light nearly leaves and HOLDS (~290ms of almost-dark, 72–80%) before
+   flaring back too eager. Menace is rhythm, not constant noise: the one
+   quiet beat is the threat. 3.6s stays incommensurate with the body's 1.5s
+   and the tip's 1.1s, so the silhouette keeps drifting its loop — the body
+   still reaches while its light goes hollow. */
+@keyframes coreGutter {
+  0%   { opacity: 0.95; transform: scaleY(1)    scaleX(1); }
+  5%   { opacity: 0.5;  transform: scaleY(0.93) scaleX(1.04); }
+  10%  { opacity: 1;    transform: scaleY(1.05) scaleX(0.96); }
+  15%  { opacity: 0.4;  transform: scaleY(0.88) scaleX(1.08); }
+  20%  { opacity: 0.85; transform: scaleY(1.03) scaleX(0.97); }
+  25%  { opacity: 0.55; transform: scaleY(0.95) scaleX(1.03); }
+  31%  { opacity: 0.95; transform: scaleY(1.01) scaleX(0.99); }
+  37%  { opacity: 0.45; transform: scaleY(0.9)  scaleX(1.06); }
+  43%  { opacity: 1;    transform: scaleY(1.06) scaleX(0.95); }
+  49%  { opacity: 0.5;  transform: scaleY(0.92) scaleX(1.05); }
+  55%  { opacity: 0.9;  transform: scaleY(1.02) scaleX(0.98); }
+  61%  { opacity: 0.6;  transform: scaleY(0.96) scaleX(1.02); }
+  66%  { opacity: 0.95; transform: scaleY(1.04) scaleX(0.97); }
+  72%  { opacity: 0.3;  transform: scaleY(0.86) scaleX(1.06); }
+  80%  { opacity: 0.25; transform: scaleY(0.84) scaleX(1.07); } /* held — almost out */
+  84%  { opacity: 1;    transform: scaleY(1.1)  scaleX(0.94); } /* the flare back */
+  92%  { opacity: 0.7;  transform: scaleY(0.97) scaleX(1.01); }
+  100% { opacity: 0.95; transform: scaleY(1)    scaleX(1); }
 }
 .fire-corrupt-flicker {
-  animation: coreThrash 0.9s var(--ease-in-out) infinite;
+  animation: coreGutter 3.6s var(--ease-in-out) infinite;
   transform-origin: 50% 100%;
   transform-box: fill-box;
 }
@@ -622,14 +663,52 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
   transform-box: fill-box;
 }
 
-@keyframes haloPulseCorrupt {
-  0%, 100% { opacity: 0.95; transform: scale(1); }
-  35% { opacity: 0.7; transform: scale(0.96); }
-  62% { opacity: 1; transform: scale(1.07); }
+/* The halo is the core's light on the air — it cannot ignore it. Same 3.6s
+   clock, every dip and flare landing on the core's (softened: distance
+   averages), and it goes down with the core in the held almost-dark beat.
+   The corrupt flame is one clenched nervous system; the pure flame's
+   unsynchronized 4s/5s ease is what this violates. */
+@keyframes haloGutterCorrupt {
+  0%   { opacity: 0.95; transform: scale(1); }
+  5%   { opacity: 0.75; transform: scale(0.97); }
+  10%  { opacity: 1;    transform: scale(1.05); }
+  15%  { opacity: 0.7;  transform: scale(0.96); }
+  20%  { opacity: 0.92; transform: scale(1.03); }
+  31%  { opacity: 0.95; transform: scale(1); }
+  37%  { opacity: 0.72; transform: scale(0.97); }
+  43%  { opacity: 1;    transform: scale(1.06); }
+  49%  { opacity: 0.75; transform: scale(0.96); }
+  61%  { opacity: 0.82; transform: scale(1.01); }
+  66%  { opacity: 0.95; transform: scale(1.04); }
+  72%  { opacity: 0.45; transform: scale(0.93); }
+  80%  { opacity: 0.4;  transform: scale(0.92); } /* the room darkens with it */
+  84%  { opacity: 1;    transform: scale(1.07); }
+  92%  { opacity: 0.85; transform: scale(1); }
+  100% { opacity: 0.95; transform: scale(1); }
 }
 .fire-halo-corrupt {
-  animation: haloPulseCorrupt 1.6s var(--ease-in-out) infinite;
+  animation: haloGutterCorrupt 3.6s var(--ease-in-out) infinite;
   transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* The floor takes the same jumpy light: the corrupt pool gutters on the
+   core's clock and goes near-dark in its held beat — the mirror of the
+   pure pool's slow generous breath. */
+@keyframes groundGutterCorrupt {
+  0%, 100% { opacity: 0.95; transform: scaleX(1); }
+  15%      { opacity: 0.75; transform: scaleX(0.99); }
+  43%      { opacity: 1;    transform: scaleX(1.02); }
+  49%      { opacity: 0.78; transform: scaleX(0.99); }
+  66%      { opacity: 0.95; transform: scaleX(1.01); }
+  72%      { opacity: 0.35; transform: scaleX(0.97); }
+  80%      { opacity: 0.3;  transform: scaleX(0.97); } /* held with the core */
+  84%      { opacity: 1;    transform: scaleX(1.06); } /* the flare throws wider light */
+  92%      { opacity: 0.88; transform: scaleX(1); }
+}
+.fire-ground-corrupt {
+  animation: groundGutterCorrupt 3.6s var(--ease-in-out) infinite;
+  transform-origin: 50% 50%;
   transform-box: fill-box;
 }
 
@@ -640,6 +719,24 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
 .fire-tip {
   animation: tipWavePure 2.4s var(--ease-in-out) infinite;
   transform-origin: 50% 100%;
+  transform-box: fill-box;
+}
+
+/* The flame's light reaches the floor it stands on: the pool at the wick
+   breathes on the drift's own 5s clock — widest and brightest when the
+   flame stands tallest (stops mirror flameDrift's 17/38/56/78). Same
+   light, same breath. The halo's 4s pulse stays deliberately loose:
+   a calm body's rhythms need not agree. */
+@keyframes groundBreathPure {
+  0%, 100% { opacity: 0.88; transform: scaleX(1); }
+  17%      { opacity: 0.92; transform: scaleX(1.012); }
+  38%      { opacity: 1;    transform: scaleX(1.035); }
+  56%      { opacity: 0.97; transform: scaleX(1.026); }
+  78%      { opacity: 0.92; transform: scaleX(1.012); }
+}
+.fire-ground-pure {
+  animation: groundBreathPure 5s var(--ease-in-out) infinite;
+  transform-origin: 50% 50%; /* the pool widens about its own centre */
   transform-box: fill-box;
 }
 
@@ -719,6 +816,33 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
 .pull-2 { animation: pull 2.6s cubic-bezier(0.6, 0, 0.95, 0.3) -0.87s infinite; }
 .pull-3 { animation: pull 2.6s cubic-bezier(0.6, 0, 0.95, 0.3) -1.73s infinite; }
 
+/* The vortex turns. The arms wind inward counterclockwise, so a CLOCKWISE
+   rotation makes the pattern creep toward the throat (the spinning-spiral
+   illusion) — the arms feed the drain rather than orbit it. One revolution
+   in 36s. Menace, not spin. */
+@keyframes spiralTurn {
+  to { transform: rotate(360deg); }
+}
+.water-spiral {
+  transform-box: view-box;
+  transform-origin: 100px 100px; /* the throat — the same pivot as the swap */
+  animation: spiralTurn 36s linear infinite;
+}
+
+/* The mouth dilates as it is fed — one slow opening across three ring-falls
+   (7.8s = 3 x the pull's 2.6s), then a clench on the drain's own ease-in
+   curve: it takes in long and swallows fast. About 1px at the rim. */
+@keyframes voidDilate {
+  0%   { transform: scale(1); animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1); } /* --ease-in-out: the slow opening */
+  68%  { transform: scale(1.05); animation-timing-function: cubic-bezier(0.6, 0, 0.95, 0.3); } /* the pull's own ease-in: the swallow */
+  100% { transform: scale(1); }
+}
+.water-void-eye {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  animation: voidDilate 7.8s infinite;
+}
+
 /* Pure water is never dead-still: the two faint guide rings hold a slow,
    counter-phased caustic breath — generous and outward, the baseline the
    corrupt void's hungry clench then violates. */
@@ -733,14 +857,32 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
 }
 .water-calm-2 { animation-delay: -6s; }
 
+/* The source pays for every ring. One ripple is born every 2s (6s loop,
+   three rings phased -2s); on each birth the droplet gives — a quick
+   sub-pixel dip and dim — then refills for the rest of the beat. Both
+   animations start together and pause together, so the lock holds. */
+@keyframes dropletGive {
+  0%   { transform: scale(1);     opacity: 1; }
+  9%   { transform: scale(0.93);  opacity: 0.84; }
+  55%  { transform: scale(1.015); opacity: 1; }
+  100% { transform: scale(1);     opacity: 1; }
+}
+.water-drop {
+  transform-box: view-box;
+  transform-origin: 100px 100px; /* the still centre */
+  animation: dropletGive 2s var(--ease-out) infinite;
+}
+
 /* ====================== EARTH ART ====================== */
 /* "Earth holds" is an active verb: holding is the continuous resistance of
    weight, not stillness. A sub-pixel compression about the footing makes the
    monolith bear something — so the fracture lands as that effort failing.
    Slower than fire (under sustained load, not breathing). */
 @keyframes holdSettle {
-  0%, 100% { transform: scaleY(1); }
-  50%      { transform: scaleY(0.997); }
+  0%   { transform: scaleY(1); }
+  62%  { transform: scaleY(0.997); } /* the long bearing-down — ~8s of giving */
+  74%  { transform: scaleY(0.997); } /* held at the floor of the load */
+  100% { transform: scaleY(1); }     /* the quicker recovery — resistance */
 }
 .element-earth .pure-layer {
   transform-box: view-box;
@@ -754,6 +896,21 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
   transition: stroke-dashoffset 760ms var(--ease-slow);
+}
+
+/* Once drawn, the fissure is not dead: the ember vein under the spine
+   smolders — heat banked under ash, never flaring. Opacity only; the
+   black cracks stay void. Uneven stops so it never reads as a metronome. */
+@keyframes crackSmolder {
+  0%, 100% { stroke-opacity: 0.55; }
+  23%      { stroke-opacity: 0.32; }
+  41%      { stroke-opacity: 0.5; }
+  58%      { stroke-opacity: 0.38; }
+  76%      { stroke-opacity: 0.68; } /* the one slow swell */
+  88%      { stroke-opacity: 0.45; }
+}
+.earth-crack-ember {
+  animation: crackSmolder 11s var(--ease-in-out) infinite;
 }
 @media (hover: hover) and (pointer: fine) {
   .element-earth:hover .earth-crack-1 { stroke-dashoffset: 0; transition-delay: 100ms; }
@@ -769,6 +926,29 @@ body.is-corrupt-all .element-earth .earth-crack-1 { stroke-dashoffset: 0; transi
 body.is-corrupt-all .element-earth .earth-crack-2 { stroke-dashoffset: 0; transition-delay: 280ms; }
 body.is-corrupt-all .element-earth .earth-crack-3 { stroke-dashoffset: 0; transition-delay: 460ms; }
 body.is-corrupt-all .element-earth .earth-crack-4 { stroke-dashoffset: 0; transition-delay: 640ms; }
+
+/* Fracture has a consequence: as the spine completes (100ms delay + the bulk
+   of --ease-slow's front-loaded 760ms draw), the stone gives — a one-time
+   sub-pixel drop, accelerating like a fall and stopping dead. The shadow
+   ellipse sits outside these groups and stays put: the stone presses INTO
+   the ground. The un-settle rides invisibly inside the 620ms fade to pure. */
+.earth-settle {
+  transform-box: view-box;
+  transform-origin: 100px 224px; /* the ground line */
+  transform: translateY(0);
+  transition: transform 500ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .element-earth:hover .earth-settle {
+    transform: translateY(0.6px); /* user units: ~1 device px on desktop */
+    transition: transform 180ms cubic-bezier(0.7, 0, 1, 1) 640ms;
+  }
+}
+.element-earth.is-corrupt .earth-settle,
+body.is-corrupt-all .element-earth .earth-settle {
+  transform: translateY(0.6px);
+  transition: transform 180ms cubic-bezier(0.7, 0, 1, 1) 640ms;
+}
 
 /* ====================== AIR ART ====================== */
 @keyframes riseA {
@@ -818,6 +998,20 @@ body.is-corrupt-all .element-earth .earth-crack-4 { stroke-dashoffset: 0; transi
   transform-box: fill-box;
 }
 
+/* The corrupt source still tries to breathe — faster and shallower, the
+   draw of a throat under a ceiling. Same gesture as sourceBreathe, starved:
+   roughly a third the period, a fraction of the amplitude. Not inert —
+   inert would be a different thing; this is the same breath, suffocating. */
+@keyframes sourceStarve {
+  0%, 100% { stroke-opacity: 0.22; transform: scaleX(1); }
+  50%      { stroke-opacity: 0.32; transform: scaleX(1.015); }
+}
+.air-source-starved {
+  animation: sourceStarve 1.6s var(--ease-in-out) infinite;
+  transform-origin: center;
+  transform-box: fill-box; /* mirrors .air-source — scaleX only, zero-height bbox is fine */
+}
+
 /* The cut lands like a blade — drawn fast with weight (--ease-slow), and it
    does NOT shimmer afterward. The perpetual throb is gone. */
 .air-cut {
@@ -861,6 +1055,21 @@ body.is-corrupt-all .element-air .air-cut { stroke-dashoffset: 0; transition-del
 .frozen-wisp-strain {
   animation: wispStrain 3.2s var(--ease-in-out) infinite;
 }
+
+/* The cut is force, not ink: as the blade lands (160ms delay + 440ms draw),
+   the whole held column is pressed down a hair and stays pressed; on
+   release the pressure lifts (no delay) and the column rises back as the
+   breath resumes. A wave radiating off the cut was considered and rejected
+   as ornament — this is only the consequence, two pixels of it. Transition
+   on a wrapper group, so it never touches the wisps' own animations. */
+.air-held {
+  transition: transform 500ms var(--ease-slow);
+}
+@media (hover: hover) and (pointer: fine) {
+  .element-air:hover .air-held { transform: translateY(2px); transition-delay: 480ms; }
+}
+.element-air.is-corrupt .air-held { transform: translateY(2px); transition-delay: 480ms; }
+body.is-corrupt-all .element-air .air-held { transform: translateY(2px); transition-delay: 480ms; }
 
 /* ====================== CODA ====================== */
 .coda {
@@ -1150,21 +1359,28 @@ footer {
   .fire-flicker, .fire-corrupt-flicker,
   .fire-halo-pure, .fire-halo-corrupt,
   .fire-tip, .fire-tip-corrupt,
+  .fire-ground-pure, .fire-ground-corrupt,
   .ember,
-  .ripple-1, .ripple-2, .ripple-3,
-  .pull-1, .pull-2, .pull-3,
-  .water-calm,
+  .ripple-1, .ripple-2, .ripple-3, .water-drop,
+  .pull-1, .pull-2, .pull-3, .water-spiral,
+  .water-calm, .water-void-eye,
   .element-earth .pure-layer,
+  .earth-crack-ember,
   .frozen-wisp, .frozen-wisp-strain,
-  .breath, .air-source, .air-cut, .air-tick,
+  .breath, .air-source, .air-source-starved, .air-cut, .air-tick,
   .element-air .pure-layer { animation: none !important; }
+  /* the sigil stands fully drawn — no fade, no drawing, no staggered delays */
+  .sigil .sigil-circle { animation: none !important; opacity: 1; }
+  .sigil .sigil-fire,
+  .sigil .sigil-water,
+  .sigil .sigil-bar { animation: none !important; stroke-dashoffset: 0; }
   html { scroll-behavior: auto; }
   .element-art-parallax { transform: none !important; }
   /* the swap collapses to a plain opacity crossfade — no emerge, no collapse,
      no lean: the shells are still shells when they do not move */
   .pure-layer, .corrupt-layer,
   .element-water .pure-layer, .element-water .corrupt-layer,
-  .fire-lean { transform: none !important; }
+  .fire-lean, .earth-settle, .air-held { transform: none !important; }
   /* zero every staggered delay so sequenced motion lands instant and whole */
   .reveal-stagger.in-view > *,
   .element-earth .earth-crack,

@@ -121,13 +121,19 @@ export default function ScrollReveal() {
       if (!reduceMotion) {
         const vh = window.innerHeight;
         const center = vh / 2;
+        // read phase — gather every rect before any write, so a transform
+        // write can never force a synchronous style flush for the next read
+        const writes: Array<[HTMLElement, number]> = [];
         for (const target of parallaxTargets) {
           const parent = target.parentElement;
           if (!parent) continue;
           const rect = parent.getBoundingClientRect();
           const elCenter = rect.top + rect.height / 2;
           const distance = elCenter - center;
-          const offset = -distance * 0.08;
+          writes.push([target, -distance * 0.08]);
+        }
+        // write phase
+        for (const [target, offset] of writes) {
           target.style.transform = `translateY(${offset.toFixed(2)}px)`;
         }
       }
