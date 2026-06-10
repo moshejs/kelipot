@@ -4,13 +4,18 @@ import type { NextConfig } from "next";
 // GitHub Pages at /<repo>/. Local dev is unaffected.
 const isPagesBuild = process.env.GITHUB_ACTIONS === "true";
 
-const nextConfig: NextConfig = isPagesBuild
-  ? {
-      output: "export",
-      basePath: "/kelipot",
-      trailingSlash: true,
-      images: { unoptimized: true },
-    }
-  : {};
+const nextConfig: NextConfig = {
+  // Pin the workspace root so a stray lockfile elsewhere (e.g. ~) can't
+  // make Next infer the wrong root in local builds.
+  outputFileTracingRoot: __dirname,
+  ...(isPagesBuild
+    ? {
+        output: "export",
+        basePath: "/kelipot",
+        trailingSlash: true,
+        images: { unoptimized: true },
+      }
+    : {}),
+};
 
 export default nextConfig;

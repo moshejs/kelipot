@@ -1,8 +1,26 @@
 import ScrollReveal from "./scroll-reveal";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "VisualArtwork",
+  name: "Klippot — Four Corruptions",
+  url: "https://moshejs.github.io/kelipot/",
+  description:
+    "Four corruptions of fire, water, earth, and air — a kabbalistic inquiry in four movements.",
+  artform: "Interactive web piece",
+  artMedium: "Digital",
+  creator: { "@type": "Person", name: "Moshe Malka" },
+};
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       {/* ====================== READING PROGRESS ====================== */}
       <div className="reading-progress" aria-hidden="true">
         <div className="reading-progress-bar"></div>
@@ -27,6 +45,8 @@ export default function Home() {
           <span className="rail-name">Air</span>
         </a>
       </nav>
+
+      <main id="content">
 
       {/* ====================== HERO ====================== */}
       <section className="hero container">
@@ -58,10 +78,14 @@ export default function Home() {
       </section>
 
       {/* ====================== I. FIRE ====================== */}
-      <section className="element element-fire" id="fire">
+      <section className="element element-fire" id="fire" tabIndex={-1}>
         <div className="container">
           <div className="element-grid">
-            <div className="element-art-wrap reveal">
+            <div
+              className="element-art-wrap reveal"
+              role="img"
+              aria-label="Fire — a single calm flame; corrupted, the same flame thrashes and throws embers"
+            >
               <div className="element-art-parallax">
                 <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <defs>
@@ -108,22 +132,24 @@ export default function Home() {
                   {/* pure: a single calm flame */}
                   <g className="pure-layer">
                     <ellipse className="fire-halo-pure" cx="100" cy="178" rx="62" ry="64" fill="url(#fire-pure-glow)" filter="url(#fire-blur-pure)" />
-                    <g className="fire-pure-flame">
-                      <path
-                        d="M 80 222 C 60 220 44 192 56 156 C 66 130 84 122 86 96 C 86 76 94 58 100 38 C 106 58 114 76 114 96 C 116 122 134 130 144 156 C 156 192 140 220 120 222 L 80 222 Z"
-                        fill="url(#fire-pure-grad)"
-                      />
-                      <path
-                        className="fire-flicker"
-                        d="M 88 218 C 74 215 62 188 72 158 C 80 134 90 130 90 108 C 90 90 96 76 100 62 C 104 76 110 90 110 108 C 110 130 120 134 128 158 C 138 188 126 215 112 218 L 88 218 Z"
-                        fill="url(#fire-pure-core)"
-                      />
-                      <path
-                        className="fire-tip"
-                        d="M 100 78 C 96 96 96 130 100 150 C 104 130 104 96 100 78 Z"
-                        fill="#fff4d8"
-                        fillOpacity="0.7"
-                      />
+                    <g className="fire-lean">
+                      <g className="fire-pure-flame">
+                        <path
+                          d="M 80 222 C 60 220 44 192 56 156 C 66 130 84 122 86 96 C 86 76 94 58 100 38 C 106 58 114 76 114 96 C 116 122 134 130 144 156 C 156 192 140 220 120 222 L 80 222 Z"
+                          fill="url(#fire-pure-grad)"
+                        />
+                        <path
+                          className="fire-flicker"
+                          d="M 88 218 C 74 215 62 188 72 158 C 80 134 90 130 90 108 C 90 90 96 76 100 62 C 104 76 110 90 110 108 C 110 130 120 134 128 158 C 138 188 126 215 112 218 L 88 218 Z"
+                          fill="url(#fire-pure-core)"
+                        />
+                        <path
+                          className="fire-tip"
+                          d="M 100 78 C 96 96 96 130 100 150 C 104 130 104 96 100 78 Z"
+                          fill="#fff4d8"
+                          fillOpacity="0.7"
+                        />
+                      </g>
                     </g>
                     <ellipse cx="100" cy="222" rx="42" ry="3" fill="#f4c98a" fillOpacity="0.5" />
                     <circle cx="101" cy="22" r="1.2" fill="#fbe5b8" fillOpacity="0.65" />
@@ -132,22 +158,24 @@ export default function Home() {
                   {/* corrupt: aggressive, taller flame with embers */}
                   <g className="corrupt-layer">
                     <ellipse className="fire-halo-corrupt" cx="100" cy="166" rx="76" ry="82" fill="url(#fire-corrupt-glow)" filter="url(#fire-blur-corrupt)" />
-                    <g className="fire-corrupt-flame">
-                      <path
-                        d="M 76 226 C 48 224 22 192 38 152 C 52 120 78 114 70 86 C 62 56 86 36 94 16 Q 100 6 106 16 C 114 36 138 56 130 86 C 122 114 148 120 162 152 C 178 192 152 224 124 226 L 76 226 Z"
-                        fill="url(#fire-corrupt-grad)"
-                      />
-                      <path
-                        className="fire-corrupt-flicker"
-                        d="M 86 220 C 64 218 46 192 60 156 C 70 130 86 124 82 100 C 78 78 90 60 96 40 Q 100 30 104 40 C 110 60 122 78 118 100 C 114 124 130 130 140 156 C 154 192 136 218 114 220 L 86 220 Z"
-                        fill="url(#fire-corrupt-core)"
-                      />
-                      <path
-                        className="fire-tip-corrupt"
-                        d="M 100 50 C 96 90 96 140 100 168 C 104 140 104 90 100 50 Z"
-                        fill="#fff0d0"
-                        fillOpacity="0.7"
-                      />
+                    <g className="fire-lean">
+                      <g className="fire-corrupt-flame">
+                        <path
+                          d="M 76 226 C 48 224 22 192 38 152 C 52 120 78 114 70 86 C 62 56 86 36 94 16 Q 100 6 106 16 C 114 36 138 56 130 86 C 122 114 148 120 162 152 C 178 192 152 224 124 226 L 76 226 Z"
+                          fill="url(#fire-corrupt-grad)"
+                        />
+                        <path
+                          className="fire-corrupt-flicker"
+                          d="M 86 220 C 64 218 46 192 60 156 C 70 130 86 124 82 100 C 78 78 90 60 96 40 Q 100 30 104 40 C 110 60 122 78 118 100 C 114 124 130 130 140 156 C 154 192 136 218 114 220 L 86 220 Z"
+                          fill="url(#fire-corrupt-core)"
+                        />
+                        <path
+                          className="fire-tip-corrupt"
+                          d="M 100 50 C 96 90 96 140 100 168 C 104 140 104 90 100 50 Z"
+                          fill="#fff0d0"
+                          fillOpacity="0.7"
+                        />
+                      </g>
                     </g>
                     <ellipse cx="100" cy="226" rx="56" ry="4" fill="#c43a22" fillOpacity="0.6" />
                     {/* embers (animated) */}
@@ -170,6 +198,7 @@ export default function Home() {
                   <path d="M7 1 L13 13 L1 13 Z" fill="none" stroke="currentColor" strokeWidth="0.8" />
                 </svg>
                 <span>Fire</span>
+                <span className="he-name" lang="he" aria-hidden="true">אש</span>
               </div>
               <h2>
                 Passion, <span className="verb">turned.</span>
@@ -186,10 +215,14 @@ export default function Home() {
       </section>
 
       {/* ====================== II. WATER ====================== */}
-      <section className="element element-water" id="water">
+      <section className="element element-water" id="water" tabIndex={-1}>
         <div className="container">
           <div className="element-grid">
-            <div className="element-art-wrap reveal">
+            <div
+              className="element-art-wrap reveal"
+              role="img"
+              aria-label="Water — ripples giving outward from a still center; corrupted, a black drain pulling everything in"
+            >
               <div className="element-art-parallax">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <defs>
@@ -209,8 +242,8 @@ export default function Home() {
                   <circle cx="100" cy="100" r="92" fill="none" stroke="#6b7ba8" strokeWidth="0.4" strokeOpacity="0.22" />
 
                   <g className="pure-layer">
-                    <circle cx="100" cy="100" r="62" fill="none" stroke="#6b7ba8" strokeWidth="0.3" strokeOpacity="0.14" />
-                    <circle cx="100" cy="100" r="40" fill="none" stroke="#6b7ba8" strokeWidth="0.3" strokeOpacity="0.16" />
+                    <circle className="water-calm water-calm-1" cx="100" cy="100" r="62" fill="none" stroke="#6b7ba8" strokeWidth="0.3" strokeOpacity="0.14" />
+                    <circle className="water-calm water-calm-2" cx="100" cy="100" r="40" fill="none" stroke="#6b7ba8" strokeWidth="0.3" strokeOpacity="0.16" />
                     <circle className="ripple-1" cx="100" cy="100" r="8" fill="none" stroke="#9aacd4" strokeWidth="0.9" />
                     <circle className="ripple-2" cx="100" cy="100" r="8" fill="none" stroke="#9aacd4" strokeWidth="0.9" />
                     <circle className="ripple-3" cx="100" cy="100" r="8" fill="none" stroke="#9aacd4" strokeWidth="0.9" />
@@ -251,6 +284,7 @@ export default function Home() {
                   <path d="M1 1 L13 1 L7 13 Z" fill="none" stroke="currentColor" strokeWidth="0.8" />
                 </svg>
                 <span>Water</span>
+                <span className="he-name" lang="he" aria-hidden="true">מים</span>
               </div>
               <h2>
                 The well, <span className="verb">reversed.</span>
@@ -267,10 +301,14 @@ export default function Home() {
       </section>
 
       {/* ====================== III. EARTH ====================== */}
-      <section className="element element-earth" id="earth">
+      <section className="element element-earth" id="earth" tabIndex={-1}>
         <div className="container">
           <div className="element-grid">
-            <div className="element-art-wrap reveal">
+            <div
+              className="element-art-wrap reveal"
+              role="img"
+              aria-label="Earth — a standing stone, whole; corrupted, the same stone shot through with cracks"
+            >
               <div className="element-art-parallax">
                 <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <defs>
@@ -361,6 +399,7 @@ export default function Home() {
                   <line x1="3" y1="9" x2="11" y2="9" stroke="currentColor" strokeWidth="0.6" />
                 </svg>
                 <span>Earth</span>
+                <span className="he-name" lang="he" aria-hidden="true">עפר</span>
               </div>
               <h2>
                 Effort, <span className="verb">refusing.</span>
@@ -377,10 +416,14 @@ export default function Home() {
       </section>
 
       {/* ====================== IV. AIR ====================== */}
-      <section className="element element-air" id="air">
+      <section className="element element-air" id="air" tabIndex={-1}>
         <div className="container">
           <div className="element-grid">
-            <div className="element-art-wrap reveal">
+            <div
+              className="element-art-wrap reveal"
+              role="img"
+              aria-label="Air — breath rising freely from the ground; corrupted, the same breath cut off beneath a hard line"
+            >
               <div className="element-art-parallax">
                 <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <defs>
@@ -404,15 +447,15 @@ export default function Home() {
                   </g>
 
                   <g className="corrupt-layer">
-                    <path d="M 50 172 Q 47 164 51 156" fill="none" stroke="#c4cdd0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.45" />
-                    <path d="M 78 148 Q 76 141 80 134" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.45" />
-                    <path d="M 100 156 Q 97 144 101 132" fill="none" stroke="#c4cdd0" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.45" />
-                    <path d="M 124 142 Q 122 133 126 124" fill="none" stroke="#c4cdd0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.45" />
-                    <path d="M 150 168 Q 148 161 152 154" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.45" />
-                    <path d="M 64 190 Q 63 185 65 181" fill="none" stroke="#c4cdd0" strokeWidth="0.8" strokeLinecap="round" strokeOpacity="0.4" />
-                    <path d="M 136 180 Q 134 171 138 162" fill="none" stroke="#c4cdd0" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.45" />
-                    <path d="M 44 208 Q 42 203 46 198" fill="none" stroke="#c4cdd0" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.4" />
-                    <path d="M 158 210 Q 156 205 160 200" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.4" />
+                    <path className="frozen-wisp" d="M 50 172 Q 47 164 51 156" fill="none" stroke="#c4cdd0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.45" />
+                    <path className="frozen-wisp frozen-wisp-strain" d="M 78 148 Q 76 141 80 134" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.45" />
+                    <path className="frozen-wisp frozen-wisp-strain" d="M 100 156 Q 97 144 101 132" fill="none" stroke="#c4cdd0" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.45" />
+                    <path className="frozen-wisp frozen-wisp-strain" d="M 124 142 Q 122 133 126 124" fill="none" stroke="#c4cdd0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.45" />
+                    <path className="frozen-wisp" d="M 150 168 Q 148 161 152 154" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.45" />
+                    <path className="frozen-wisp" d="M 64 190 Q 63 185 65 181" fill="none" stroke="#c4cdd0" strokeWidth="0.8" strokeLinecap="round" strokeOpacity="0.4" />
+                    <path className="frozen-wisp" d="M 136 180 Q 134 171 138 162" fill="none" stroke="#c4cdd0" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.45" />
+                    <path className="frozen-wisp" d="M 44 208 Q 42 203 46 198" fill="none" stroke="#c4cdd0" strokeWidth="0.9" strokeLinecap="round" strokeOpacity="0.4" />
+                    <path className="frozen-wisp" d="M 158 210 Q 156 205 160 200" fill="none" stroke="#c4cdd0" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.4" />
                     <line x1="38" y1="223" x2="162" y2="223" stroke="#c4cdd0" strokeWidth="0.4" strokeOpacity="0.25" />
                     <line className="air-cut" x1="20" y1="120" x2="180" y2="120" stroke="#c4cdd0" strokeWidth="1" strokeOpacity="0.85" />
                     <line className="air-cut air-tick" x1="20" y1="115" x2="20" y2="125" stroke="#c4cdd0" strokeWidth="1" strokeOpacity="0.85" />
@@ -430,6 +473,7 @@ export default function Home() {
                   <line x1="3" y1="8" x2="11" y2="8" stroke="currentColor" strokeWidth="0.6" />
                 </svg>
                 <span>Air</span>
+                <span className="he-name" lang="he" aria-hidden="true">רוח</span>
               </div>
               <h2>
                 Breath, <span className="verb">withheld.</span>
@@ -446,19 +490,24 @@ export default function Home() {
       </section>
 
       {/* ====================== CODA ====================== */}
-      <section className="coda container">
-        <div className="mark reveal">— Coda —</div>
-        <blockquote className="reveal">
+      <section className="coda container reveal-coda">
+        <div className="mark">— Coda —</div>
+        <blockquote>
           The shell is not the spark.{" "}
           <span className="dim">
             What was warm is warm still — somewhere<br />a witness keeps the count.
           </span>
         </blockquote>
-        <div className="signature reveal">
-          Witnessed <span style={{ color: "var(--ember)" }}>·</span> Held{" "}
-          <span style={{ color: "var(--ember)" }}>·</span> Released
+        <div className="signature">
+          <span className="sig-1">Witnessed</span>{" "}
+          <span className="sig-dot" style={{ color: "var(--ember)" }}>·</span>{" "}
+          <span className="sig-2">Held</span>{" "}
+          <span className="sig-dot" style={{ color: "var(--ember)" }}>·</span>{" "}
+          <span className="sig-3">Released</span>
         </div>
       </section>
+
+      </main>
 
       <footer>
         Klippot &nbsp;{" "}

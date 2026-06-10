@@ -27,22 +27,32 @@ const hebrew = Frank_Ruhl_Libre({
 export const metadata: Metadata = {
   metadataBase: new URL("https://moshejs.github.io"),
   title: "Klippot — Four Corruptions",
-  description: "An inquiry in four movements.",
+  description:
+    "Four corruptions of fire, water, earth, and air — a kabbalistic inquiry in four movements.",
+  // Next does not prepend basePath to hand-written metadata URLs, so the
+  // /kelipot prefix is explicit here (metadataBase stays the bare host so
+  // file-convention assets like the OG image don't get double-prefixed).
+  alternates: { canonical: "/kelipot/" },
   openGraph: {
     title: "Klippot — Four Corruptions",
-    description: "An inquiry in four movements.",
+    description:
+      "Four corruptions of fire, water, earth, and air — a kabbalistic inquiry in four movements.",
+    url: "/kelipot/",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Klippot — Four Corruptions",
-    description: "An inquiry in four movements.",
+    description:
+      "Four corruptions of fire, water, earth, and air — a kabbalistic inquiry in four movements.",
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#0a0908",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
