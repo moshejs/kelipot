@@ -2,10 +2,12 @@
   "name": "kelipot",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:pages": "GITHUB_ACTIONS=true next build"
   },
   "dependencies": {
     "next": "^15.0.0",

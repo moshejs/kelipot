@@ -42,7 +42,11 @@ A few of the choices, in case they're invisible:
 - **Hover is the act of looking inside.** The motion answering hover
   isn't decoration — it's the shell responding to being seen.
 - **Holding `space`** is a longer act: sustaining attention on all four
-  at once. Releasing returns them. The piece lets them be.
+  at once. It asks a real hold — a quick tap keeps Space's ordinary
+  meaning and simply turns the page. Releasing returns them, IV back
+  to I. The piece lets them be.
+- **Each element carries its Hebrew name** — אש, מים, עפר, רוח — the
+  tradition the word *klippot* comes from, kept in its own letters.
 - **The rail** (I — IV) is a count more than a navigation. A witness
   keeps the count.
 - **The animations have characters.** Pure fire breathes; corrupt fire
@@ -71,9 +75,10 @@ static export → GitHub Pages.
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # production build
-npm run start    # serve the production build
+npm run dev          # http://localhost:3000
+npm run build        # local production build
+npm run start        # serve the local production build
+npm run build:pages  # the exact static export GitHub Pages serves (out/)
 ```
 
 ## Structure
@@ -85,13 +90,18 @@ app/
 ├── scroll-reveal.tsx       client: reveals, rail spy,
 │                           reading progress, parallax, keyboard
 ├── globals.css             all styles + keyframes
-├── icon.svg                favicon (the sigil)
-└── opengraph-image.tsx     1200×630 OG / Twitter card
+├── icon0.png               favicon, raster (Safari tabs)
+├── icon1.svg               favicon, vector (the sigil)
+├── apple-icon.png          iOS home-screen tile
+├── not-found.tsx           custom 404 — "a shell, but no spark"
+├── opengraph-image.png     1200×630 OG / Twitter card
+└── opengraph-image.alt.txt alt text for the card
 ```
 
 No CSS framework, no UI library. Just Next.js 15 (App Router), React 19,
-`next/font` for Cormorant Garamond + Inter, and hand-written CSS + inline
-SVG. The art is text. The text is art.
+`next/font` for Cormorant Garamond + Inter + Frank Ruhl Libre (the
+Hebrew), and hand-written CSS + inline SVG. The art is text. The text
+is art.
 
 ## Motion & accessibility
 
@@ -101,9 +111,14 @@ core flicker, parallax, smooth-scroll. The piece falls back to a still
 form for anyone who needs it to. The shells are still shells when they
 do not move; their meaning does not depend on motion.
 
-Decorative SVG carries `aria-hidden="true"`; the semantic content is in
-the surrounding text, which can be read on its own without losing the
-piece.
+Each element's art is a labeled image (`role="img"` with a one-line
+description of both forms), so the piece reads aloud as well as it
+renders. Purely ornamental marks — the corner glyphs, the sigil, the
+Hebrew name spans — stay `aria-hidden`. The rail is a real `nav` with
+`aria-current` marking the section in view. Without JavaScript nothing
+is hidden: the reveal styles apply only under
+`@media (scripting: enabled)`. And the piece prints — a print
+stylesheet remaps the palette onto paper.
 
 ## The sigil
 
@@ -115,6 +130,11 @@ The classical four-element symbol, compressed.
 There is also a quiet pun: the *Magen David* hides inside it. Not the
 subject of the piece — only a reminder of whose tradition the word
 *klippot* comes from.
+
+## Rights
+
+© Moshe Malka. The text, artwork, and code of this piece are all rights
+reserved. It is published to be read, not reused.
 
 ## A note
 

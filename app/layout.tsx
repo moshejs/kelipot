@@ -17,8 +17,11 @@ const inter = Inter({
   display: "swap",
 });
 
+// hebrew subset only: this face renders exclusively Hebrew strings, and the
+// latin subset was the page's largest preloaded asset (~44 KB) — stray Latin
+// would still resolve via next/font's unicode-range fallback rules.
 const hebrew = Frank_Ruhl_Libre({
-  subsets: ["hebrew", "latin"],
+  subsets: ["hebrew"],
   weight: ["300", "400", "500"],
   variable: "--font-hebrew",
   display: "swap",

@@ -71,7 +71,8 @@ export default function Home() {
         <div className="scroll-cue">
           <span className="line"></span>
           <span className="hint-desktop">
-            Hover each form · hold <span className="key">space</span> to invert
+            Hover each form
+            <span className="hint-js"> · hold <span className="key">space</span> to invert</span>
           </span>
           <span className="hint-touch">Tap each form to reveal</span>
         </div>

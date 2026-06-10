@@ -261,6 +261,12 @@ body {
     display: inline;
   }
 }
+/* with JS off, neither the Space invert nor the tap toggle exists — hide the
+   clauses that would promise them (hover swaps are pure CSS and stay true) */
+@media (scripting: none) {
+  .hero .scroll-cue .hint-js { display: none; }
+  .hero .scroll-cue .hint-touch { display: none; }
+}
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(14px); }
@@ -272,6 +278,11 @@ body {
   padding: 140px 0;
   border-top: 1px solid var(--rule);
   position: relative;
+  /* iOS Safari keeps double-tap smart-zoom on scalable device-width pages —
+     the second tap of a quick corrupt/restore pair would zoom instead of
+     toggling. manipulation drops only double-tap; panning and pinch-zoom
+     (a11y) stay intact. Scoped here so prose keeps double-tap zoom. */
+  touch-action: manipulation;
 }
 
 /* rail targets (tabindex="-1"): focus lands here programmatically; the rail
@@ -306,6 +317,26 @@ body {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+/* height + offset fallback where aspect-ratio is unsupported (Safari <= 14 /
+   Chrome <= 87 / Firefox <= 88) — without it the wrap computes to 0px and all
+   four artworks vanish. A 100% padding-top spacer reproduces the 1:1 box;
+   longhand offsets are needed too (`inset` is newer than these browsers).
+   Modern browsers never match this block. */
+@supports not (aspect-ratio: 1) {
+  .element-art-wrap::before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+  .element-art-parallax,
+  .element-art-wrap svg {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
 }
 
 /* The pure and corrupt forms share one silhouette AND one anchor: the
@@ -790,9 +821,11 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
 .ember-7 { animation: emberRiseA 4.5s linear -1.8s infinite; }
 
 /* ====================== WATER ART ====================== */
+/* r needs units: unitless lengths are Blink-only — Gecko/WebKit drop the
+   declaration and the rings freeze (stroke-width may stay unitless per SVG2) */
 @keyframes ripple {
-  from { r: 8; opacity: 0.85; }
-  to { r: 92; opacity: 0; }
+  from { r: 8px; opacity: 0.85; }
+  to { r: 92px; opacity: 0; }
 }
 .ripple-1, .ripple-2, .ripple-3 {
   transform-origin: center;
@@ -805,9 +838,9 @@ body.is-releasing .element-fire .divider { transition-delay: 330ms; }
    the throat) — a drain inhaling, the exact inverse of the pure ripple's
    even outward giving. */
 @keyframes pull {
-  from { r: 92; opacity: 0; stroke-width: 0.4; }
+  from { r: 92px; opacity: 0; stroke-width: 0.4; }
   20% { opacity: 1; stroke-width: 1.4; }
-  to { r: 4; opacity: 0; stroke-width: 1.6; }
+  to { r: 4px; opacity: 0; stroke-width: 1.6; }
 }
 .pull-1, .pull-2, .pull-3 {
   transform-origin: center;
@@ -1234,8 +1267,13 @@ body.is-corrupt-all .rail-item[data-index="3"]::before { background: var(--pale)
   transform: translateX(-4px);
   transition: opacity 400ms var(--ease-out), transform 400ms var(--ease-out);
 }
+/* :focus-visible split from the hover/active list — Safari <= 15.3 drops a
+   whole selector list containing an unknown pseudo-class */
 .rail-item.active .rail-name,
-.rail-item:hover .rail-name,
+.rail-item:hover .rail-name {
+  opacity: 1;
+  transform: translateX(0);
+}
 .rail-item:focus-visible .rail-name {
   opacity: 1;
   transform: translateX(0);
@@ -1304,12 +1342,18 @@ body.is-corrupt-all .rail-item[data-index="3"]::before { background: var(--pale)
   background: currentColor;
   transition: width 400ms var(--ease-out);
 }
-.not-found a:hover,
+.not-found a:hover {
+  color: var(--fg);
+  outline: none;
+}
 .not-found a:focus-visible {
   color: var(--fg);
   outline: none;
 }
-.not-found a:hover::before,
+.not-found a:hover::before {
+  width: 40px;
+  background: var(--ember);
+}
 .not-found a:focus-visible::before {
   width: 40px;
   background: var(--ember);
@@ -1398,4 +1442,37 @@ footer {
   .reveal-coda .sig-1, .reveal-coda .sig-2, .reveal-coda .sig-3, .reveal-coda .sig-dot {
     transition-delay: 0ms !important;
   }
+}
+
+/* ====================== PRINT ====================== */
+/* Browsers don't print backgrounds: remap the palette onto paper, force every
+   reveal-gated block visible (printing right after load would otherwise emit
+   blank sections), and drop the fixed chrome. Must follow the responsive and
+   reduced-motion blocks so same-specificity print rules win by source order. */
+@media print {
+  :root {
+    --bg: #fff;
+    --fg: #1a1814;
+    --fg-mute: #44403a;
+    --fg-faint: #55504a;
+    --line: #999;
+    --rule: #ccc;
+    --ember: #a4561f;
+    --indigo: #44506e;
+    --clay: #6e5535;
+    --pale: #4a575c;
+  }
+  html, body { background: #fff; }
+  .rail, .reading-progress, .hero .scroll-cue { display: none; }
+  .hero { min-height: 0; padding: 48px 0; }
+  .eyebrow, .hero h1, .hero .lede, .sigil .sigil-circle { animation: none; opacity: 1; }
+  .sigil .sigil-fire, .sigil .sigil-water, .sigil .sigil-bar { animation: none; stroke-dashoffset: 0; }
+  .reveal, .reveal-stagger > *,
+  .reveal-coda .mark, .reveal-coda blockquote,
+  .reveal-coda .sig-1, .reveal-coda .sig-2, .reveal-coda .sig-3, .reveal-coda .sig-dot {
+    opacity: 1 !important; transform: none !important;
+  }
+  .element { break-inside: avoid; padding: 64px 0; }
+  .coda { padding: 64px 0; break-inside: avoid; }
+  .element-art-parallax { transform: none !important; }
 }

@@ -4,6 +4,18 @@ import { useEffect } from "react";
 
 export default function ScrollReveal() {
   useEffect(() => {
+    // Pre-IntersectionObserver browsers (desktop Safari 12.0, iOS 12.0–12.1 —
+    // inside Next 15's compile floor of "safari 12"): force everything visible
+    // and skip all enhancement, so a throw can never blank the statically-
+    // rendered piece at hydration. These browsers also predate
+    // @media (scripting: enabled), so the CSS hide rules never applied.
+    if (!("IntersectionObserver" in window)) {
+      document
+        .querySelectorAll(".reveal, .reveal-stagger, .reveal-coda")
+        .forEach((el) => el.classList.add("in-view"));
+      return;
+    }
+
     // 1. Reveal-on-scroll
     const revealIO = new IntersectionObserver(
       (entries) => {
